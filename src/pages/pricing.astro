@@ -2,7 +2,9 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Layer from "../components/Layer.astro";
+import For from "../components/jinja/For.astro";
 import If from "../components/jinja/If.astro";
+import Model from "../components/pricing/Model.astro";
 import "../styles/base.css";
 import icon from "../lib/icon.svg?url";
 
@@ -83,6 +85,31 @@ const plans = [
         }
       </div>
       <h2 class="font-headline-large">Models</h2>
+      <table class="models-table">
+        <thead>
+          <tr class="font-title-medium">
+            <th style="text-align: left">Model</th>
+            <th style="text-align: right">$/M in</th>
+            <th style="text-align: right">$/M out</th>
+            <th style="text-align: right">Speed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <For
+            items="models"
+            component={Model}
+            props={{
+              id: ".id",
+              quantization: ".quantization",
+              context_length: ".context_length",
+              max_completion_tokens: ".max_completion_tokens",
+              promptPricing: `.pricing["prompt"]`,
+              completionPricing: `.pricing["completion"]`,
+              speed: ".speed",
+            }}
+          />
+        </tbody>
+      </table>
     </main>
 
     <Footer pushToBottom={true} />
@@ -147,5 +174,26 @@ const plans = [
       margin-right: -0.5rem;
       margin-bottom: -0.5rem;
     }
+  }
+
+  .models-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-feature-settings: "tnum";
+  }
+
+  .models-table th,
+  .models-table td {
+    margin: 0;
+    padding: 0;
+    border: none;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid rgb(var(--m3-scheme-outline-variant));
+    /*&:first-child {
+      padding-left: 1rem;
+    }
+    &:last-child {
+      padding-right: 1rem;
+    }*/
   }
 </style>
