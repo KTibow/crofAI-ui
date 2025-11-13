@@ -1,8 +1,12 @@
 ---
-// Footer component with links
+interface Props {
+  pushToBottom?: boolean;
+}
+
+const { pushToBottom = false } = Astro.props;
 ---
 
-<footer>
+<footer style={pushToBottom ? "margin-top: auto" : ""}>
   <a href="/privacy"> Privacy policy </a>
   <a href="/startups"> Startup? </a>
   <a href="mailto:nahcrof@gmail.com">

@@ -1,0 +1,57 @@
+---
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import "../styles/base.css";
+import icon from "../lib/icon.svg?url";
+
+const { frontmatter } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href={icon} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{frontmatter.title}</title>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer pushToBottom={true} />
+  </body>
+</html>
+
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 50rem;
+    align-self: center;
+    > * {
+      margin-top: 1em;
+    }
+    > h2 {
+      font-size: 2rem;
+    }
+    > h3 {
+      font-size: 1.5rem;
+    }
+    > pre {
+      padding: 0.5rem;
+      border-radius: 1rem;
+      background-color: rgb(var(--m3-scheme-surface-container)) !important;
+      color: inherit !important;
+    }
+    > ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+    a {
+      color: rgb(var(--m3-scheme-primary));
+    }
+  }
+</style>
