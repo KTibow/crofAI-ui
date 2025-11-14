@@ -189,7 +189,7 @@
 
     background-color: currentColor;
     opacity: 0;
-    transition: opacity var(--m3-util-easing-fast);
+    transition: opacity 200ms;
 
     &:not(
       :global(input:disabled + label) > .tint,

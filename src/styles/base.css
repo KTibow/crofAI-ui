@@ -97,6 +97,12 @@ body {
   letter-spacing: 0;
   font-weight: 500;
 }
+.font-label-large {
+  font-size: 0.875rem;
+  line-height: 1.429;
+  letter-spacing: 0.006rem;
+  font-weight: 500;
+}
 .font-label-medium {
   font-size: 0.75rem;
   line-height: 1.333;

@@ -130,7 +130,7 @@
           }
         }}
       ></textarea>
-      <button disabled={Boolean(aborter)}>
+      <button class="font-label-large" disabled={Boolean(aborter)}>
         <Layer />
         Send
       </button>
@@ -155,7 +155,7 @@
       {/each}
     </select>
     <label>
-      <p>
+      <p class="font-label-large">
         <span>Temperature</span>
         <output>{temperature.toFixed(1)}</output>
       </p>
@@ -265,7 +265,7 @@
     padding: 0.5rem;
     border-radius: 1rem;
     margin-top: auto;
-    background-color: rgb(var(--m3-scheme-primary-container-subtle));
+    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.6);
     color: rgb(var(--m3-scheme-on-primary-container-subtle));
   }
 </style>
