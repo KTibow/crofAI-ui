@@ -41,6 +41,41 @@ const devModels = [
     speed: 8,
   },
 ];
+
+// Build model props for dev mode
+const buildDevProps = (model: typeof devModels[0]) => {
+  const contextK = Math.floor(model.context_length / 1024);
+  const maxOutK = Math.floor(model.max_completion_tokens / 1024);
+  const contextDisplay = model.max_completion_tokens !== model.context_length
+    ? `${contextK}k context / ${maxOutK}k output`
+    : `${contextK}k`;
+
+  const minSpeed = 10;
+  const maxSpeed = 1000;
+  const speedPercent = Math.min(((model.speed - minSpeed) / (maxSpeed - minSpeed)) * 100, 100);
+  const speedColor = `color-mix(in oklab, oklch(0.8 0.3379 164.12) ${speedPercent}%, oklch(0.8 0.0664 0))`;
+
+  return {
+    id: model.id,
+    quantization: model.quantization,
+    contextDisplay,
+    promptPricing: model.pricing.prompt,
+    completionPricing: model.pricing.completion,
+    speedDisplay: `${model.speed} tps`,
+    speedStyle: `text-align: right; color: ${speedColor}`,
+  };
+};
+
+// Prod props use Jinja template strings
+const prodProps = {
+  id: "{{ item.id }}",
+  quantization: "{{ item.quantization }}",
+  contextDisplay: "{% if item.max_completion_tokens != item.context_length %}{{ (item.context_length / 1024) | int }}k context / {{ (item.max_completion_tokens / 1024) | int }}k output{% else %}{{ (item.context_length / 1024) | int }}k{% endif %}",
+  promptPricing: '{{ item.pricing["prompt"] }}',
+  completionPricing: '{{ item.pricing["completion"] }}',
+  speedDisplay: "{{ item.speed }} tps",
+  speedStyle: "text-align: right; {% set speed_val = item.speed %}{% set speed_percent = (((speed_val - 10) / (1000 - 10)) * 100) | int %}{% set speed_percent_clamped = [0, [speed_percent, 100] | min] | max %}color: color-mix(in oklab, oklch(0.8 0.3379 164.12) {{ speed_percent_clamped }}%, oklch(0.8 0.0664 0))",
+};
 ---
 
 <!doctype html>
@@ -226,7 +261,8 @@ const devModels = [
     font-feature-settings: "tnum";
   }
 
-  .models-table th {
+  .models-table :global(th),
+  .models-table :global(td) {
     margin: 0;
     padding: 0;
     border: none;
