@@ -22,9 +22,9 @@ const devContext: Record<string, boolean> = {
     ) : null
   ) : (
     <>
-      <Fragment set:raw={`{% if ${condition} %}`} />
+      <Fragment set:html={`{% if ${condition} %}`} />
       <slot />
-      <Fragment set:raw="{% endif %}" />
+      <Fragment set:html="{% endif %}" />
     </>
   )
 }
