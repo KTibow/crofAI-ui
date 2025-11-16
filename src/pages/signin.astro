@@ -1,0 +1,92 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/base.css";
+import icon from "../lib/icon.svg?url";
+import Layer from "../components/Layer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href={icon} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In/Up</title>
+  </head>
+  <body>
+    <Header />
+    <form method="POST">
+      <input name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button class="primary font-title-medium">
+        <Layer />
+        Sign in
+      </button>
+      <button class="secondary font-title-medium" formaction="/signup">
+        <Layer />
+        Sign up
+      </button>
+    </form>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 25rem;
+    gap: 0.25rem;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  input {
+    height: 3rem;
+    padding-inline: 0.75rem;
+    border-radius: 0.5rem;
+    &:is(:first-of-type) {
+      border-start-start-radius: 1rem;
+      border-start-end-radius: 1rem;
+    }
+    box-shadow: inset 0 0 0 1px rgb(var(--m3-scheme-outline));
+    transition: all 100ms;
+
+    &:focus {
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgb(var(--m3-scheme-primary));
+    }
+  }
+
+  .primary {
+    display: flex;
+    height: 3rem;
+    border-radius: 0.5rem 0.5rem 1rem 1rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+
+    background-color: rgb(var(--m3-scheme-primary));
+    color: rgb(var(--m3-scheme-on-primary));
+  }
+  .secondary {
+    display: flex;
+    height: 2rem;
+    padding-inline: 1rem;
+    border-radius: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.75rem;
+
+    cursor: pointer;
+    position: relative;
+
+    color: rgb(var(--m3-scheme-primary));
+  }
+</style>
