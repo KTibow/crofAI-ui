@@ -54,7 +54,7 @@ const devModels = [
   <body>
     <Header />
     <main>
-      <h2 class="font-headline-large">With plans, never worry about prices per token</h2>
+      <h2 class="font-headline-small">With plans, never worry about prices per token</h2>
       <div class="plans">
         {
           plans.map(({ name, planId, price, description }) => (
@@ -103,7 +103,6 @@ const devModels = [
           ))
         }
       </div>
-      <h2 class="font-headline-large">Models</h2>
       <table class="models-table">
         <thead>
           <tr class="font-title-medium">
@@ -127,7 +126,7 @@ const devModels = [
                 const minSpeed = 10;
                 const maxSpeed = 1000;
                 const speedPercent = Math.min(
-                  ((model.speed - minSpeed) / (maxSpeed - minSpeed)) * 100,
+                  Math.max(((model.speed - minSpeed) / (maxSpeed - minSpeed)) * 100, 0),
                   100,
                 );
                 const speedColor = `color-mix(in oklab, oklch(0.8 0.3379 164.12) ${speedPercent}%, oklch(0.8 0.0664 0))`;
