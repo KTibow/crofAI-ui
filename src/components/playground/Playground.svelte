@@ -4,14 +4,23 @@
   import { slide } from "svelte/transition";
   import { parse } from "./microdown";
 
-  let temperature = $state(1);
   let model = $state("kimi-k2-0905");
+  let systemPrompt = $state("");
+  let temperature = $state(1);
+  let topP = $state(1);
+
   type Model = { id: string; name: string };
   let models: Model[] = $state([]);
 
   let prompt = $state("");
-  type Generation = { reasoning: string; content: string; ttft?: number; tps?: number };
-  let generation: Generation | undefined = $state();
+  type Message = {
+    role: "user" | "assistant";
+    content: string;
+    reasoning?: string;
+    ttft?: number;
+    tps?: number;
+  };
+  let messages: Message[] = $state([]);
   let aborter: AbortController | undefined = $state();
 
   const updateModels = async () => {
@@ -50,6 +59,23 @@
     const promptFixed = prompt.trim();
     if (!promptFixed) return;
 
+    messages.push({
+      role: "user",
+      content: promptFixed,
+    });
+    prompt = "";
+
+    const apiMessages: { role: string; content: string }[] = messages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    }));
+    if (systemPrompt.trim()) {
+      apiMessages.unshift({
+        role: "system",
+        content: systemPrompt.trim(),
+      });
+    }
+
     const start = Date.now();
     const r = await fetch("/v2/chat/completions", {
       method: "POST",
@@ -59,12 +85,7 @@
       body: JSON.stringify({
         model,
         temperature,
-        messages: [
-          {
-            role: "user",
-            content: promptFixed,
-          },
-        ],
+        messages: apiMessages,
         stream: true,
       }),
       signal: aborter!.signal,
@@ -73,8 +94,13 @@
       throw new Error(`Generation failed with status ${r.status}`);
     }
 
-    let g: Generation = $state({ reasoning: "", content: "" });
-    generation = g;
+    // Create reactive assistant message and add to array
+    let assistantMsg: Message = $state({
+      role: "assistant",
+      content: "",
+      reasoning: "",
+    });
+    messages.push(assistantMsg);
 
     let buffer = "";
     for await (const chunk of iterateStream(r.body!)) {
@@ -90,15 +116,15 @@
         const delta = parsed.choices[0].delta;
         if (delta) {
           const { reasoning_content, content } = delta;
-          if (reasoning_content) g.reasoning += reasoning_content;
-          if (content) g.content += content;
+          if (reasoning_content) assistantMsg.reasoning! += reasoning_content;
+          if (content) assistantMsg.content += content;
           if (reasoning_content?.trim() || content?.trim()) {
-            g.ttft ||= Date.now() - start;
+            assistantMsg.ttft ||= Date.now() - start;
           }
         }
 
         if (parsed.usage) {
-          g.tps = parsed.usage.tokens_per_second;
+          assistantMsg.tps = parsed.usage.tokens_per_second;
         }
       }
     }
@@ -118,154 +144,247 @@
   });
 </script>
 
-<div class="container">
-  <div class="content">
-    <form onsubmit={sendWrapped} class="prompt-container">
-      <textarea
-        placeholder="Prompt"
-        bind:value={prompt}
-        onkeydown={(e) => {
-          if (e.key == "Enter" && (e.metaKey || e.ctrlKey)) {
-            e.currentTarget.form?.requestSubmit();
-          }
-        }}
-      ></textarea>
-      <button class="font-label-large" disabled={Boolean(aborter)}>
-        <Layer />
-        Send
-      </button>
-    </form>
-    {#if generation?.reasoning.trim()}
-      <div class="output" in:slide={{ duration: 500 }}>
-        <h2 class="font-title-medium">Reasoning</h2>
-        <output class="prose">{@html parse(generation.reasoning)}</output>
-      </div>
-    {/if}
-    {#if generation?.content.trim()}
-      <div class="output" in:slide={{ duration: 500 }}>
-        <h2 class="font-title-medium">Response</h2>
-        <output class="prose">{@html parse(generation.content)}</output>
-      </div>
-    {/if}
-  </div>
-  <div class="sidebar">
+<div class="messages">
+  {#each messages as message}
+    <div class="message {message.role}" in:slide={{ duration: 200 }}>
+      {#if message.role == "user"}
+        <div class="message-content">
+          <p>{message.content}</p>
+        </div>
+      {:else}
+        {#if message.reasoning?.trim()}
+          <div class="reasoning">
+            <h3 class="font-title-medium">Reasoning</h3>
+            <div class="prose">{@html parse(message.reasoning)}</div>
+          </div>
+        {/if}
+        <div class="message-content">
+          <div class="prose">{@html parse(message.content)}</div>
+        </div>
+        {#if message.ttft || message.tps}
+          <div class="message-stats font-label-medium">
+            {#if message.ttft}
+              <span>TTFT: {(message.ttft / 1000).toFixed(2)}s</span>
+            {/if}
+            {#if message.tps}
+              <span>{message.tps.toFixed(0)} TPS</span>
+            {/if}
+          </div>
+        {/if}
+      {/if}
+    </div>
+  {/each}
+</div>
+<form onsubmit={sendWrapped} class="prompt-container">
+  <!-- svelte-ignore a11y_autofocus -->
+  <textarea
+    placeholder="Message"
+    autofocus
+    onkeydown={(e) => {
+      if (e.key == "Enter" && !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        e.currentTarget.form?.requestSubmit();
+      }
+    }}
+    bind:value={prompt}
+  ></textarea>
+  <div class="controls">
     <select class="model-selector" bind:value={model}>
       {#each models as m}
         <option value={m.id}>{m.name}</option>
       {/each}
     </select>
-    <label>
-      <p class="font-label-large">
-        <span>Temperature</span>
-        <output>{temperature.toFixed(1)}</output>
-      </p>
-      <input type="range" min="0" max="2" step="any" bind:value={temperature} />
-    </label>
-    {#if generation?.ttft || generation?.tps}
-      <div class="stats">
-        <h3 class="font-title-medium">Stats</h3>
-        {#if generation?.ttft}
-          <p>TTFT: <output>{(generation.ttft / 1000).toFixed(2)}s</output></p>
-        {/if}
-        {#if generation?.tps}
-          <p><output>{generation.tps.toFixed(0)}</output> TPS</p>
-        {/if}
-      </div>
+    {#if messages.length > 0}
+      <button
+        class="clear font-label-large"
+        onclick={() => {
+          messages = [];
+        }}
+      >
+        <Layer />
+        Clear
+      </button>
     {/if}
+    <button class="send font-label-large" disabled={!prompt || Boolean(aborter)}>
+      <Layer />
+      Send
+    </button>
   </div>
+</form>
+<div class="sidebar">
+  <label>
+    <p class="font-label-large">
+      <span>Temperature</span>
+      <output>{temperature.toFixed(1)}</output>
+    </p>
+    <input type="range" min="0" max="2" step="any" bind:value={temperature} />
+  </label>
+  <label>
+    <p class="font-label-large">
+      <span>Top P</span>
+      <output>{topP.toFixed(1)}</output>
+    </p>
+    <input type="range" min="0" max="1" step="any" bind:value={topP} />
+  </label>
+  <label class="prompt">
+    <p class="font-label-large">System prompt</p>
+    <textarea bind:value={systemPrompt} placeholder="You are a..."></textarea>
+  </label>
 </div>
 
 <style>
-  .container {
-    display: grid;
-    grid-template-columns: 1fr 20rem;
-    flex-grow: 1;
-    gap: 0.5rem;
+  .messages,
+  .prompt-container {
+    width: 100%;
+    max-width: 50rem;
+    justify-self: center;
+    grid-column: 1;
+  }
+  .sidebar {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: 0;
+    bottom: 0;
     padding: 0.5rem;
   }
-  .content {
+
+  .messages {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    > * {
-      flex: 1;
+  }
+  .message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 50rem;
+    align-self: center;
+    &.user {
+      .message-content {
+        background-color: rgb(var(--m3-scheme-primary-container-subtle));
+        padding: 0.5rem;
+        border-radius: 1rem;
+      }
     }
+    &.assistant {
+      align-self: flex-start;
+      .reasoning {
+        background-color: rgb(var(--m3-scheme-tertiary-container-subtle));
+        color: rgb(var(--m3-scheme-on-tertiary-container-subtle));
+        padding: 0.5rem;
+        border-radius: 1rem;
+        h3 {
+          margin: 0 0 0.5rem 0;
+        }
+      }
+      .message-stats {
+        display: flex;
+        gap: 1rem;
+        color: rgb(var(--m3-scheme-on-surface-variant));
+      }
+    }
+  }
+  .prose > :global(:first-child) {
+    margin-top: 0;
   }
   .prompt-container {
     display: grid;
-    position: relative;
-    min-height: 20dvh;
+    position: sticky;
+    bottom: 0;
+
+    border-radius: 1rem 1rem 0 0;
+    background-color: rgb(var(--m3-scheme-surface-container-low));
     textarea {
       resize: none;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      box-shadow: inset 0 0 0 1px rgb(var(--m3-scheme-outline));
+      padding-block: 0.5rem 2.5rem;
+      padding-inline: 1rem;
+      min-height: 3rem;
       &:focus {
         outline: none;
-        box-shadow: inset 0 0 0 2px rgb(var(--m3-scheme-secondary));
       }
     }
-    button {
+    .controls {
       display: flex;
-      height: 2rem;
-      border-radius: 1rem;
-      align-items: center;
-      padding-inline: 1rem;
 
       position: absolute;
-      bottom: 0;
-      right: 0;
+      inset: auto 0 0 0;
+      pointer-events: none;
+      > * {
+        display: flex;
+        align-items: center;
 
-      background-color: rgb(var(--m3-scheme-primary));
-      color: rgb(var(--m3-scheme-on-primary));
-      transition:
-        background-color 200ms,
-        color 200ms;
+        height: 2rem;
+        border-radius: 1rem;
+        padding-inline: 1rem;
+        color: rgb(var(--m3-scheme-on-surface-variant));
+
+        &:enabled {
+          cursor: pointer;
+        }
+
+        transition:
+          color 200ms,
+          opacity 200ms;
+        pointer-events: auto;
+        position: relative;
+      }
+    }
+
+    select {
+      margin-right: auto;
+    }
+    select:hover {
+      color: rgb(var(--m3-scheme-on-background));
+    }
+    .clear {
+      color: rgb(var(--m3-scheme-error));
+    }
+    .send {
+      color: rgb(var(--m3-scheme-primary));
       &:disabled {
         opacity: 0.38;
       }
-      &:enabled {
-        cursor: pointer;
-      }
     }
-  }
-  .output {
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    border-radius: 1rem;
-    background-color: rgb(var(--m3-scheme-surface-container));
   }
 
   .sidebar {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    > * {
+      padding: 0.5rem;
+      border-radius: 1rem;
+      background-color: rgb(var(--m3-scheme-surface-container-lowest));
+      color: rgb(var(--m3-scheme-on-surface-variant));
+    }
   }
-  select {
-    height: 2rem;
-    padding-inline: 1rem;
-    border-radius: 1rem;
-    box-shadow: inset 0 0 0 1px rgb(var(--m3-scheme-outline));
-    cursor: pointer;
-  }
+
   label {
     display: flex;
     flex-direction: column;
     p {
       display: flex;
       justify-content: space-between;
-      margin: 0;
-    }
-    output {
-      color: rgb(var(--m3-scheme-on-surface-variant));
     }
   }
-  .stats {
-    padding: 0.5rem;
-    border-radius: 1rem;
-    margin-top: auto;
-    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.6);
-    color: rgb(var(--m3-scheme-on-primary-container-subtle));
+
+  .prompt {
+    position: relative;
+    flex-grow: 1;
+  }
+  .prompt textarea {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    padding: 2rem 0.5rem 0.5rem 0.5rem;
+    color: rgb(var(--m3-scheme-on-surface));
+    &:focus {
+      outline: none;
+    }
   }
 </style>

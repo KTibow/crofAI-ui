@@ -16,6 +16,18 @@ import icon from "../lib/icon.svg?url";
   </head>
   <body>
     <Header />
-    <Playground client:load />
+    <div class="playground">
+      <Playground client:load />
+    </div>
   </body>
 </html>
+
+<style>
+  .playground {
+    display: grid;
+    grid-template-columns: 1fr 20rem;
+    grid-template-rows: 1fr auto;
+    flex-grow: 1;
+    gap: 0.5rem;
+  }
+</style>
