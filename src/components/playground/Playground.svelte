@@ -246,6 +246,7 @@
     position: sticky;
     top: 0;
     bottom: 0;
+    height: 100dvh;
     padding: 0.5rem;
   }
 
@@ -266,6 +267,9 @@
         background-color: rgb(var(--m3-scheme-primary-container-subtle));
         padding: 0.5rem;
         border-radius: 1rem;
+        p {
+          white-space: pre-wrap;
+        }
       }
     }
     &.assistant {
@@ -318,6 +322,7 @@
         height: 2rem;
         border-radius: 1rem;
         padding-inline: 1rem;
+        background-color: rgb(var(--m3-scheme-surface-container-low) / 0.8);
         color: rgb(var(--m3-scheme-on-surface-variant));
 
         &:enabled {
