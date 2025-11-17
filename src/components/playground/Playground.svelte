@@ -246,7 +246,7 @@
     position: sticky;
     top: 0;
     bottom: 0;
-    height: 100dvh;
+    max-height: 100dvh;
     padding: 0.5rem;
   }
 
