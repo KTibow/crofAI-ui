@@ -5,7 +5,7 @@ interface Props {
   contextDisplay: string;
   promptPricing: string;
   completionPricing: string;
-  speedDisplay: string;
+  speed: string;
   speedStyle: string;
 }
 
@@ -15,12 +15,12 @@ const {
   contextDisplay,
   promptPricing,
   completionPricing,
-  speedDisplay,
+  speed,
   speedStyle,
 } = Astro.props;
 ---
 
-<tr>
+<tr data-id={id} data-prompt={promptPricing} data-completion={completionPricing} data-speed={speed}>
   <td>
     <h2 class="font-title-medium">
       <Fragment set:html={id} />
@@ -47,7 +47,7 @@ const {
   <td style="text-align: right"><Fragment set:html={`$${promptPricing}`} /></td>
   <td style="text-align: right"><Fragment set:html={`$${completionPricing}`} /></td>
   <td style={speedStyle}>
-    <Fragment set:html={speedDisplay} />
+    <Fragment set:html={speed} /> tps
   </td>
 </tr>
 

@@ -362,13 +362,13 @@ const devModels = [
       <table class="models-table">
         <thead>
           <tr class="font-title-medium">
-            <th style="text-align: left">Model</th>
-            <th style="text-align: right">$/M in</th>
-            <th style="text-align: right">$/M out</th>
-            <th style="text-align: right">Speed</th>
+            <th data-sort="id">Model <span class="sort-indicator"></span></th>
+            <th data-sort="prompt">$/M in <span class="sort-indicator"></span></th>
+            <th data-sort="completion">$/M out <span class="sort-indicator"></span></th>
+            <th data-sort="speed">Speed <span class="sort-indicator"></span></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="models-tbody">
           {
             import.meta.env.DEV ? (
               devModels.map((model) => {
@@ -394,7 +394,7 @@ const devModels = [
                     contextDisplay={contextDisplay}
                     promptPricing={model.pricing.prompt}
                     completionPricing={model.pricing.completion}
-                    speedDisplay={`${model.speed} tps`}
+                    speed={`${model.speed}`}
                     speedStyle={`text-align: right; color: ${speedColor}`}
                   />
                 );
@@ -408,7 +408,7 @@ const devModels = [
                   contextDisplay="{% if item.max_completion_tokens != item.context_length %}{{ (item.context_length / 1024) | int }}k context / {{ (item.max_completion_tokens / 1024) | int }}k output{% else %}{{ (item.context_length / 1024) | int }}k{% endif %}"
                   promptPricing='{{ item.pricing["prompt"] }}'
                   completionPricing='{{ item.pricing["completion"] }}'
-                  speedDisplay="{{ item.speed }} tps"
+                  speed="{{ item.speed }}"
                   speedStyle="text-align: right; {% set speed_val = item.speed %}{% set speed_percent = (((speed_val - 10) / (1000 - 10)) * 100) | int %}{% set speed_percent_clamped = [0, [speed_percent, 100] | min] | max %}color: color-mix(in oklab, oklch(0.8 0.3379 164.12) {{ speed_percent_clamped }}%, oklch(0.8 0.0664 0))"
                 />
                 <Fragment set:html="{% endfor %}" />
@@ -420,6 +420,62 @@ const devModels = [
     </main>
 
     <Footer pushToBottom={true} />
+
+    <script>
+      let currentSort: string | null = null;
+      let currentDirection: "asc" | "desc" = "asc";
+
+      const headers = document.querySelectorAll("[data-sort]");
+      headers.forEach((header) => {
+        header.addEventListener("click", () => {
+          const sortKey = header.getAttribute("data-sort");
+          if (!sortKey) return;
+
+          // Toggle direction if clicking same column
+          if (currentSort == sortKey) {
+            currentDirection = currentDirection == "asc" ? "desc" : "asc";
+          } else {
+            currentSort = sortKey;
+            currentDirection = "asc";
+          }
+
+          // Update indicators
+          headers.forEach((h) => {
+            const indicator = h.querySelector(".sort-indicator");
+            if (indicator) {
+              if (h == header) {
+                indicator.textContent = currentDirection == "asc" ? " ↑" : " ↓";
+              } else {
+                indicator.textContent = "";
+              }
+            }
+          });
+
+          sortTable(sortKey, currentDirection);
+        });
+      });
+
+      function sortTable(key: string, direction: "asc" | "desc") {
+        const tbody = document.getElementById("models-tbody");
+        if (!tbody) return;
+
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        rows.sort((a, b) => {
+          if (key == "id") {
+            const aVal = a.getAttribute("data-id") || "";
+            const bVal = b.getAttribute("data-id") || "";
+            return direction == "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+          } else {
+            const aVal = parseFloat(a.getAttribute(`data-${key}`) || "0");
+            const bVal = parseFloat(b.getAttribute(`data-${key}`) || "0");
+            return direction == "asc" ? aVal - bVal : bVal - aVal;
+          }
+        });
+
+        rows.forEach((row) => tbody.appendChild(row));
+      }
+    </script>
   </body>
 </html>
 
@@ -487,6 +543,19 @@ const devModels = [
     width: 100%;
     border-collapse: collapse;
     font-feature-settings: "tnum";
+  }
+
+  .models-table th {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .models-table th:first-child {
+    text-align: left;
+  }
+
+  .models-table th:not(:first-child) {
+    text-align: right;
   }
 
   .models-table :global(th),
