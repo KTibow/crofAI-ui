@@ -8,6 +8,7 @@
   let systemPrompt = $state("");
   let temperature = $state(1);
   let topP = $state(1);
+  let allowFallbacks = $state(true);
 
   type Model = { id: string; name: string };
   let models: Model[] = $state([]);
@@ -83,7 +84,7 @@
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        model,
+        model: allowFallbacks ? model : `${model}:consistent`,
         temperature,
         messages: apiMessages,
         stream: true,
@@ -226,6 +227,10 @@
     </p>
     <input type="range" min="0" max="1" step="any" bind:value={topP} />
   </label>
+  <label class="checkbox">
+    <p class="font-label-large">Allow fallback servers</p>
+    <input type="checkbox" bind:checked={allowFallbacks} />
+  </label>
   <label class="prompt">
     <p class="font-label-large">System prompt</p>
     <textarea bind:value={systemPrompt} placeholder="You are a..."></textarea>
@@ -303,7 +308,7 @@
     textarea {
       resize: none;
       padding-block: 0.5rem 2.5rem;
-      padding-inline: 1rem;
+      padding-inline: 0.75rem;
       min-height: 3rem;
       &:focus {
         outline: none;
@@ -321,7 +326,7 @@
 
         height: 2rem;
         border-radius: 1rem;
-        padding-inline: 1rem;
+        padding-inline: 0.75rem;
         background-color: rgb(var(--m3-scheme-surface-container-low) / 0.8);
         color: rgb(var(--m3-scheme-on-surface-variant));
 
@@ -374,6 +379,11 @@
       display: flex;
       justify-content: space-between;
     }
+  }
+
+  .checkbox {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .prompt {
