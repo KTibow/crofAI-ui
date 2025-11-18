@@ -1,26 +1,14 @@
 ---
-import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
 import Playground from "../components/playground/Playground.svelte";
-import "../styles/base.css";
 import "../styles/prose.css";
-import icon from "../lib/icon.svg?url";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href={icon} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Playground</title>
-  </head>
-  <body>
-    <Header />
-    <div class="playground">
-      <Playground client:load />
-    </div>
-  </body>
-</html>
+<Layout title="Playground" includeFooter={false}>
+  <div class="playground">
+    <Playground client:load />
+  </div>
+</Layout>
 
 <style>
   .playground {

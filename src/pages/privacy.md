@@ -1,5 +1,5 @@
 ---
-layout: ../components/+docs.astro
+layout: ../layouts/Docs.astro
 title: Privacy Policy
 ---
 

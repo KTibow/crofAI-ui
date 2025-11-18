@@ -1,36 +1,22 @@
 ---
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import "../styles/base.css";
-import icon from "../lib/icon.svg?url";
+import Layout from "../layouts/Layout.astro";
 import Layer from "../components/Layer.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href={icon} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign In/Up</title>
-  </head>
-  <body>
-    <Header />
-    <form method="POST">
-      <input name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button class="primary font-title-medium">
-        <Layer />
-        Sign in
-      </button>
-      <button class="secondary font-title-medium" formaction="/signup">
-        <Layer />
-        Sign up
-      </button>
-    </form>
-    <Footer />
-  </body>
-</html>
+<Layout title="Sign In/Up">
+  <form method="POST">
+    <input name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button class="primary font-title-medium">
+      <Layer />
+      Sign in
+    </button>
+    <button class="secondary font-title-medium" formaction="/signup">
+      <Layer />
+      Sign up
+    </button>
+  </form>
+</Layout>
 
 <style>
   form {

@@ -1,22 +1,10 @@
 ---
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import "../styles/base.css";
-import icon from "../lib/icon.svg?url";
+import Layout from "../layouts/Layout.astro";
 import Layer from "../components/Layer.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href={icon} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Startup Credits</title>
-  </head>
-  <body>
-    <Header />
-    <form method="POST">
+<Layout title="Startup Credits">
+  <form method="POST">
       <h1 class="font-headline-large">Tell us about your startup</h1>
       <label class="half">
         <p>Startup Name</p>
@@ -52,9 +40,7 @@ import Layer from "../components/Layer.astro";
         Apply for Credits
       </button>
     </form>
-    <Footer />
-  </body>
-</html>
+</Layout>
 
 <style>
   form {
