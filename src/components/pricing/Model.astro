@@ -18,9 +18,12 @@ const {
   speed,
   speedStyle,
 } = Astro.props;
+
+const openTag = `<tr data-id="${id}" data-prompt="${promptPricing}" data-completion="${completionPricing}" data-speed="${speed}">`;
+const closeTag = `</tr>`;
 ---
 
-<tr data-id={id} data-prompt={promptPricing} data-completion={completionPricing} data-speed={speed}>
+<Fragment set:html={openTag} />
   <td>
     <h2 class="font-title-medium">
       <Fragment set:html={id} />
@@ -49,7 +52,7 @@ const {
   <td style={speedStyle}>
     <Fragment set:html={speed} /> tps
   </td>
-</tr>
+<Fragment set:html={closeTag} />
 
 <style>
   h2 {
