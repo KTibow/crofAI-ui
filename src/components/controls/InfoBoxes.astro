@@ -1,0 +1,96 @@
+---
+import If from "../jinja/If.astro";
+import Layer from "../Layer.astro";
+
+const credits = import.meta.env.DEV ? "2.00" : "{{ user_credits }}";
+const requestsRemaining = import.meta.env.DEV ? "100" : "{{ usable_requests }}";
+const requestsTotal = import.meta.env.DEV ? "250" : "{{ requests_plan }}";
+const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
+---
+
+<div class="hboxes">
+  <div class="box">
+    <p class="font-headline-small">$<span class="credits">{credits}</span></p>
+    <h2 class="font-title-medium">Credits</h2>
+  </div>
+  <div class="box">
+    <If condition="usable_requests != None">
+      <p class="font-headline-small">{requestsRemaining}/{requestsTotal} this month</p>
+      <p>({requestsAllTime} used all time)</p>
+    </If>
+    <If condition="usable_requests == None">
+      <p class="font-headline-small">{requestsAllTime} all time</p>
+    </If>
+    <p class="font-title-medium">Requests</p>
+  </div>
+  <button class="box token">
+    <Layer />
+    <pre class="token-data font-headline-small">nahcrof_██████████</pre>
+    <p>API token; only shown once</p>
+    <p class="fake-action font-title-medium">Regenerate</p>
+  </button>
+</div>
+
+<script>
+  const tokenElement = document.querySelector(".token") as HTMLButtonElement;
+  tokenElement.onclick = async () => {
+    const r = await fetch("/user_api_create-token");
+    if (!r.ok) throw new Error("Failed to regenerate API token");
+    const { token } = await r.json();
+
+    const tokenDataElement = tokenElement.querySelector(".token-data")!;
+    const fakeActionElement = tokenElement.querySelector(".fake-action")!;
+
+    tokenDataElement.textContent = token;
+    fakeActionElement.textContent = "Copy";
+
+    tokenElement.onclick = () => {
+      navigator.clipboard.writeText(token);
+      fakeActionElement.textContent = "Copied!";
+      setTimeout(() => {
+        fakeActionElement.textContent = "Copy";
+      }, 2000);
+    };
+  };
+
+  const creditsElement = document.querySelector(".credits")!;
+  setInterval(async () => {
+    const r = await fetch("/user-api/credits");
+    const newCredits = await r.json();
+    creditsElement.textContent = newCredits;
+  }, 10000);
+</script>
+
+<style>
+  .box {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+
+    background-color: rgb(var(--m3-scheme-surface-container-low));
+
+    > .font-headline-small {
+      margin-bottom: 1rem;
+    }
+    > :last-child {
+      margin-top: auto;
+    }
+  }
+  .token {
+    cursor: pointer;
+    position: relative;
+    text-align: start;
+  }
+  .fake-action {
+    color: rgb(var(--m3-scheme-primary));
+  }
+
+  .hboxes {
+    display: flex;
+    gap: 0.5rem;
+    > * {
+      flex: 1;
+    }
+  }
+</style>

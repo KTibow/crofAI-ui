@@ -15,6 +15,18 @@ export default defineConfig({
           target: "https://ai.nahcrof.com",
           changeOrigin: true,
         },
+        "/user_api": {
+          target: "https://ai.nahcrof.com",
+          changeOrigin: true,
+        },
+        "/user-api": {
+          target: "https://ai.nahcrof.com",
+          changeOrigin: true,
+        },
+        "/settings-api": {
+          target: "https://ai.nahcrof.com",
+          changeOrigin: true,
+        },
       },
     },
   },

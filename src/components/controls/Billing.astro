@@ -1,0 +1,121 @@
+---
+import If from "../jinja/If.astro";
+---
+
+<h2 class="font-headline-large">Billing</h2>
+<div class="box">
+  <div class="tokens-anchor">Loading...</div>
+  <p class="font-title-medium">Tokens this month</p>
+</div>
+<div class="box">
+  <If condition="email">
+    <p>TODO</p>
+  </If>
+  <If condition="not email">
+    <p>Add a billing email first.</p>
+    <p>TODO</p>
+  </If>
+  <h2 class="font-title-medium">Top up credits</h2>
+</div>
+
+<script>
+  const tokensAnchor = document.querySelector(".tokens-anchor")!;
+  const loadTokens = async () => {
+    const r = await fetch("/user-api/usage");
+    const tokens: Record<
+      string,
+      { input_tokens: number; output_tokens: number; total_tokens: number }
+    > = await r.json();
+
+    // Calculate totals
+    const modelData = Object.entries(tokens)
+      .map(([model, data]) => ({
+        model,
+        ...data,
+      }))
+      .sort((a, b) => b.total_tokens - a.total_tokens);
+
+    const maxTokens = Math.max(...modelData.map((d) => d.total_tokens), 1);
+
+    // Render the chart
+    tokensAnchor.innerHTML = modelData
+      .map((data) => {
+        const inputPercent = (data.input_tokens / maxTokens) * 100;
+        const outputPercent = (data.output_tokens / maxTokens) * 100;
+
+        return `
+<div class="token-row">
+  <div class="token-label">${data.model}</div>
+  <div class="token-bar">
+    <div class="token-input" title="Input" style="width: ${inputPercent}%"></div>
+    <div class="token-output" title="Output" style="width: ${outputPercent}%"></div>
+  </div>
+  <div class="token-total">${data.total_tokens.toLocaleString()}</div>
+</div>`.trimStart();
+      })
+      .join("");
+  };
+  loadTokens();
+</script>
+
+<style>
+  .box {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+
+    background-color: rgb(var(--m3-scheme-surface-container-low));
+
+    > .font-headline-small {
+      margin-bottom: 1rem;
+    }
+    > :last-child {
+      margin-top: auto;
+    }
+  }
+
+  :global(.tokens-anchor) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.token-row) {
+    display: grid;
+    grid-template-columns: 8rem 1fr auto;
+    height: 1lh;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  :global(.token-label) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  :global(.token-bar) {
+    display: flex;
+    gap: 0.125rem;
+    position: relative;
+
+    .token-input {
+      background-color: rgb(var(--m3-scheme-tertiary));
+      border-radius: 0.25rem;
+    }
+
+    .token-output {
+      background-color: rgb(var(--m3-scheme-primary));
+      border-radius: 0.25rem;
+    }
+  }
+
+  :global(.token-total) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    align-self: center;
+  }
+</style>

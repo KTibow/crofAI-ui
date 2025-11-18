@@ -10,7 +10,7 @@ const currentPath = Astro.url.pathname;
   <nav>
     {
       pages.map(({ href, title, icon, loggedInOnly }) => {
-        const isSelected = currentPath.startsWith(href);
+        const isSelected = currentPath == href;
         const navItem = (
           <a class="font-label-medium" href={href}>
             <div class:list={{ content: true, selected: isSelected }}>

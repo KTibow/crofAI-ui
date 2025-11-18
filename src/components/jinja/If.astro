@@ -4,14 +4,21 @@ interface Props {
 }
 const { condition } = Astro.props;
 
-// Hardcoded dev context - only used in development
+const loggedin = true;
+const plan = "payg" as string;
+const email = "fake@example.com";
+const usable_requests = 100;
 const devContext: Record<string, boolean> = {
-  loggedin: true,
-  "not loggedin": false,
-  "plan == 'hobby'": false,
-  "plan == 'pro'": false,
-  "plan != 'hobby'": true,
-  "plan != 'pro'": true,
+  loggedin: loggedin,
+  "not loggedin": !loggedin,
+  "plan == 'hobby'": plan == "hobby",
+  "plan == 'pro'": plan == "pro",
+  "plan != 'hobby'": plan != "hobby",
+  "plan != 'pro'": plan != "pro",
+  email: Boolean(email),
+  "not email": !email,
+  "usable_requests != None": usable_requests != null,
+  "usable_requests == None": usable_requests == null,
 };
 ---
 
