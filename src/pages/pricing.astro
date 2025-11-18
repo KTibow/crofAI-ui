@@ -298,170 +298,170 @@ const devModels = [
 
 <Layout title="Pricing" footerPushToBottom={true}>
   <main>
-      <h2 class="font-headline-small">With plans, never worry about prices per token</h2>
-      <div class="plans">
-        {
-          plans.map(({ name, planId, price, description }) => (
-            <>
-              <If condition={`plan == '${planId}'`}>
+    <h2 class="font-headline-small">With plans, never worry about prices per token</h2>
+    <div class="plans">
+      {
+        plans.map(({ name, planId, price, description }) => (
+          <>
+            <If condition={`plan == '${planId}'`}>
+              <a
+                class="plan"
+                href="/plan-api/free"
+                onclick={`if(!confirm('Remove all ${name} priviliges?')){event.preventDefault()}`}
+              >
+                <Layer />
+                <h3>
+                  {name} • <span class="price">{price}</span>
+                </h3>
+                <p>{description}</p>
+                <div class="fake-button error">Unsubscribe</div>
+              </a>
+            </If>
+            <If condition={`plan != '${planId}'`}>
+              <If condition="not loggedin">
+                <a class="plan" href="/signin">
+                  <Layer />
+                  <h3>
+                    {name} • <span class="price">{price}</span>
+                  </h3>
+                  <p>{description}</p>
+                  <div class="fake-button">Sign in</div>
+                </a>
+              </If>
+              <If condition="loggedin">
                 <a
                   class="plan"
-                  href="/plan-api/free"
-                  onclick={`if(!confirm('Remove all ${name} priviliges?')){event.preventDefault()}`}
+                  href={`/plan-api/${planId}`}
+                  onclick={`if(!confirm('Subscribe to ${name}?')){event.preventDefault()}`}
                 >
                   <Layer />
                   <h3>
                     {name} • <span class="price">{price}</span>
                   </h3>
                   <p>{description}</p>
-                  <div class="fake-button error">Unsubscribe</div>
+                  <div class="fake-button">Purchase</div>
                 </a>
               </If>
-              <If condition={`plan != '${planId}'`}>
-                <If condition="not loggedin">
-                  <a class="plan" href="/signin">
-                    <Layer />
-                    <h3>
-                      {name} • <span class="price">{price}</span>
-                    </h3>
-                    <p>{description}</p>
-                    <div class="fake-button">Sign in</div>
-                  </a>
-                </If>
-                <If condition="loggedin">
-                  <a
-                    class="plan"
-                    href={`/plan-api/${planId}`}
-                    onclick={`if(!confirm('Subscribe to ${name}?')){event.preventDefault()}`}
-                  >
-                    <Layer />
-                    <h3>
-                      {name} • <span class="price">{price}</span>
-                    </h3>
-                    <p>{description}</p>
-                    <div class="fake-button">Purchase</div>
-                  </a>
-                </If>
-              </If>
-            </>
-          ))
-        }
-      </div>
-      <table class="models-table">
-        <thead>
-          <tr class="font-title-medium">
-            <th data-sort="id">Model <span class="sort-indicator"></span></th>
-            <th data-sort="prompt">$/M in <span class="sort-indicator"></span></th>
-            <th data-sort="completion">$/M out <span class="sort-indicator"></span></th>
-            <th data-sort="speed">Speed <span class="sort-indicator"></span></th>
-          </tr>
-        </thead>
-        <tbody id="models-tbody">
-          {
-            import.meta.env.DEV ? (
-              devModels.map((model) => {
-                const contextK = Math.floor(model.context_length / 1024);
-                const maxOutK = Math.floor(model.max_completion_tokens / 1024);
-                const contextDisplay =
-                  model.max_completion_tokens !== model.context_length
-                    ? `${contextK}k context / ${maxOutK}k output`
-                    : `${contextK}k`;
+            </If>
+          </>
+        ))
+      }
+    </div>
+    <table class="models-table">
+      <thead>
+        <tr class="font-title-medium">
+          <th data-sort="id">Model <span class="sort-indicator"></span></th>
+          <th data-sort="prompt">$/M in <span class="sort-indicator"></span></th>
+          <th data-sort="completion">$/M out <span class="sort-indicator"></span></th>
+          <th data-sort="speed">Speed <span class="sort-indicator"></span></th>
+        </tr>
+      </thead>
+      <tbody id="models-tbody">
+        {
+          import.meta.env.DEV ? (
+            devModels.map((model) => {
+              const contextK = Math.floor(model.context_length / 1024);
+              const maxOutK = Math.floor(model.max_completion_tokens / 1024);
+              const contextDisplay =
+                model.max_completion_tokens !== model.context_length
+                  ? `${contextK}k context / ${maxOutK}k output`
+                  : `${contextK}k`;
 
-                const minSpeed = 10;
-                const maxSpeed = 1000;
-                const speedPercent = Math.min(
-                  Math.max(((model.speed - minSpeed) / (maxSpeed - minSpeed)) * 100, 0),
-                  100,
-                );
-                const speedColor = `color-mix(in oklab, oklch(0.8 0.3379 164.12) ${speedPercent}%, oklch(0.8 0.0664 0))`;
+              const minSpeed = 10;
+              const maxSpeed = 1000;
+              const speedPercent = Math.min(
+                Math.max(((model.speed - minSpeed) / (maxSpeed - minSpeed)) * 100, 0),
+                100,
+              );
+              const speedColor = `color-mix(in oklab, oklch(0.8 0.3379 164.12) ${speedPercent}%, oklch(0.8 0.0664 0))`;
 
-                return (
-                  <Model
-                    id={model.id}
-                    quantization={model.quantization}
-                    contextDisplay={contextDisplay}
-                    promptPricing={model.pricing.prompt}
-                    completionPricing={model.pricing.completion}
-                    speed={`${model.speed}`}
-                    speedStyle={`text-align: right; color: ${speedColor}`}
-                  />
-                );
-              })
-            ) : (
-              <>
-                <Fragment set:html="{% for item in models %}" />
+              return (
                 <Model
-                  id="{{ item.id }}"
-                  quantization="{{ item.quantization }}"
-                  contextDisplay="{% if item.max_completion_tokens != item.context_length %}{{ (item.context_length / 1024) | int }}k context / {{ (item.max_completion_tokens / 1024) | int }}k output{% else %}{{ (item.context_length / 1024) | int }}k{% endif %}"
-                  promptPricing='{{ item.pricing["prompt"] }}'
-                  completionPricing='{{ item.pricing["completion"] }}'
-                  speed="{{ item.speed }}"
-                  speedStyle="text-align: right; {% set speed_val = item.speed %}{% set speed_percent = (((speed_val - 10) / (1000 - 10)) * 100) | int %}{% set speed_percent_clamped = [0, [speed_percent, 100] | min] | max %}color: color-mix(in oklab, oklch(0.8 0.3379 164.12) {{ speed_percent_clamped }}%, oklch(0.8 0.0664 0))"
+                  id={model.id}
+                  quantization={model.quantization}
+                  contextDisplay={contextDisplay}
+                  promptPricing={model.pricing.prompt}
+                  completionPricing={model.pricing.completion}
+                  speed={`${model.speed}`}
+                  speedStyle={`text-align: right; color: ${speedColor}`}
                 />
-                <Fragment set:html="{% endfor %}" />
-              </>
-            )
-          }
-        </tbody>
-      </table>
-    </main>
+              );
+            })
+          ) : (
+            <>
+              <Fragment set:html="{% for item in models %}" />
+              <Model
+                id="{{ item.id }}"
+                quantization="{{ item.quantization }}"
+                contextDisplay="{% if item.max_completion_tokens != item.context_length %}{{ (item.context_length / 1024) | int }}k context / {{ (item.max_completion_tokens / 1024) | int }}k output{% else %}{{ (item.context_length / 1024) | int }}k{% endif %}"
+                promptPricing='{{ item.pricing["prompt"] }}'
+                completionPricing='{{ item.pricing["completion"] }}'
+                speed="{{ item.speed }}"
+                speedStyle="text-align: right; {% set speed_val = item.speed %}{% set speed_percent = (((speed_val - 10) / (1000 - 10)) * 100) | int %}{% set speed_percent_clamped = [0, [speed_percent, 100] | min] | max %}color: color-mix(in oklab, oklch(0.8 0.3379 164.12) {{ speed_percent_clamped }}%, oklch(0.8 0.0664 0))"
+              />
+              <Fragment set:html="{% endfor %}" />
+            </>
+          )
+        }
+      </tbody>
+    </table>
+  </main>
 
   <script>
-      let currentSort: string | null = null;
-      let currentDirection: "asc" | "desc" = "asc";
+    let currentSort: string | null = null;
+    let currentDirection: "asc" | "desc" = "asc";
 
-      const headers = document.querySelectorAll("[data-sort]");
-      headers.forEach((header) => {
-        header.addEventListener("click", () => {
-          const sortKey = header.getAttribute("data-sort");
-          if (!sortKey) return;
+    const headers = document.querySelectorAll("[data-sort]");
+    headers.forEach((header) => {
+      header.addEventListener("click", () => {
+        const sortKey = header.getAttribute("data-sort");
+        if (!sortKey) return;
 
-          // Toggle direction if clicking same column
-          if (currentSort == sortKey) {
-            currentDirection = currentDirection == "asc" ? "desc" : "asc";
-          } else {
-            currentSort = sortKey;
-            currentDirection = "asc";
-          }
+        // Toggle direction if clicking same column
+        if (currentSort == sortKey) {
+          currentDirection = currentDirection == "asc" ? "desc" : "asc";
+        } else {
+          currentSort = sortKey;
+          currentDirection = "asc";
+        }
 
-          // Update indicators
-          headers.forEach((h) => {
-            const indicator = h.querySelector(".sort-indicator");
-            if (indicator) {
-              if (h == header) {
-                indicator.textContent = currentDirection == "asc" ? " ↑" : " ↓";
-              } else {
-                indicator.textContent = "";
-              }
+        // Update indicators
+        headers.forEach((h) => {
+          const indicator = h.querySelector(".sort-indicator");
+          if (indicator) {
+            if (h == header) {
+              indicator.textContent = currentDirection == "asc" ? " ↑" : " ↓";
+            } else {
+              indicator.textContent = "";
             }
-          });
-
-          sortTable(sortKey, currentDirection);
+          }
         });
+
+        sortTable(sortKey, currentDirection);
+      });
+    });
+
+    function sortTable(key: string, direction: "asc" | "desc") {
+      const tbody = document.getElementById("models-tbody");
+      if (!tbody) return;
+
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+
+      rows.sort((a, b) => {
+        if (key == "id") {
+          const aVal = a.getAttribute("data-id") || "";
+          const bVal = b.getAttribute("data-id") || "";
+          return direction == "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+          const aVal = parseFloat(a.getAttribute(`data-${key}`) || "0");
+          const bVal = parseFloat(b.getAttribute(`data-${key}`) || "0");
+          return direction == "asc" ? aVal - bVal : bVal - aVal;
+        }
       });
 
-      function sortTable(key: string, direction: "asc" | "desc") {
-        const tbody = document.getElementById("models-tbody");
-        if (!tbody) return;
-
-        const rows = Array.from(tbody.querySelectorAll("tr"));
-
-        rows.sort((a, b) => {
-          if (key == "id") {
-            const aVal = a.getAttribute("data-id") || "";
-            const bVal = b.getAttribute("data-id") || "";
-            return direction == "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-          } else {
-            const aVal = parseFloat(a.getAttribute(`data-${key}`) || "0");
-            const bVal = parseFloat(b.getAttribute(`data-${key}`) || "0");
-            return direction == "asc" ? aVal - bVal : bVal - aVal;
-          }
-        });
-
-        rows.forEach((row) => tbody.appendChild(row));
-      }
-    </script>
+      rows.forEach((row) => tbody.appendChild(row));
+    }
+  </script>
 </Layout>
 
 <style>
@@ -472,15 +472,15 @@ const devModels = [
     align-self: center;
     width: 100%;
     max-width: 50rem;
-
-    > * {
-      margin-top: 1em;
-    }
+  }
+  h2 {
+    margin-top: 1.5rem;
   }
   .plans {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
+    margin-top: 0.5rem;
   }
   .plan {
     display: flex;
@@ -488,7 +488,7 @@ const devModels = [
     text-align: start;
     position: relative;
 
-    padding: 0.5rem;
+    padding: 1rem;
     border-radius: 1.5rem;
     background-color: rgb(var(--m3-scheme-surface-container));
     cursor: pointer;
@@ -519,8 +519,8 @@ const devModels = [
       }
 
       margin-top: auto;
-      margin-right: -0.5rem;
-      margin-bottom: -0.5rem;
+      margin-right: -1rem;
+      margin-bottom: -1rem;
     }
   }
 
@@ -528,6 +528,7 @@ const devModels = [
     width: 100%;
     border-collapse: collapse;
     font-feature-settings: "tnum";
+    margin-top: 3rem;
   }
 
   .models-table th {
