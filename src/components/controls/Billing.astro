@@ -44,7 +44,7 @@ import If from "../jinja/If.astro";
         const outputPercent = (data.output_tokens / maxTokens) * 100;
 
         return `
-<div class="token-row">
+<div class="token-row font-body-medium">
   <div class="token-label">${data.model}</div>
   <div class="token-bar">
     <div class="token-input" title="Input" style="width: ${inputPercent}%"></div>
@@ -87,7 +87,6 @@ import If from "../jinja/If.astro";
     grid-template-columns: 8rem 1fr auto;
     height: 1lh;
     gap: 0.5rem;
-    font-size: 0.875rem;
   }
 
   :global(.token-label) {

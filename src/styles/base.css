@@ -124,6 +124,12 @@ body {
   letter-spacing: 0.031rem;
   font-weight: 500;
 }
+.font-body-medium {
+  font-size: 0.875rem;
+  line-height: 1.429;
+  letter-spacing: 0.016rem;
+  font-weight: 400;
+}
 ::selection {
   background-color: rgb(var(--m3-scheme-primary-container-subtle));
   color: rgb(var(--m3-scheme-on-primary-container-subtle));
