@@ -12,7 +12,7 @@ import Layer from "../Layer.astro";
 
 <script>
   const deleteForm = document.querySelector(".delete-form") as HTMLFormElement;
-  deleteForm.onsubmit = async (e) => {
+  deleteForm.onsubmit = (e) => {
     const confirmation = prompt(
       'This action cannot be undone. Type "Delete my account" to confirm.',
     );

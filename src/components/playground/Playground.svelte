@@ -208,7 +208,7 @@
     {/if}
     <button class="send font-label-large" disabled={!prompt || Boolean(aborter)}>
       <Layer />
-      Send
+      {aborter ? "Generating..." : "Send"}
     </button>
   </div>
 </form>
