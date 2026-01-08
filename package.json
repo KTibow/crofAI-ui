@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview-raw": "astro preview",
+    "preview": "uv run test.py",
     "check": "astro check",
     "astro": "astro",
     "format": "prettier --write .",
