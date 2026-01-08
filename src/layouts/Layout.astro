@@ -31,5 +31,8 @@ const {
     {includeHeader && <Header />}
     <slot />
     {includeFooter && <Footer pushToBottom={footerPushToBottom} />}
+    <script>
+      import "../lib/etc/layer.ts";
+    </script>
   </body>
 </html>

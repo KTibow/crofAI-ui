@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Layer from "./Layer.svelte";
   import { slide } from "svelte/transition";
   import { parse } from "./microdown";
 
@@ -197,17 +196,15 @@
     </select>
     {#if messages.length > 0}
       <button
-        class="clear font-label-large"
+        class="clear font-label-large layer"
         onclick={() => {
           messages = [];
         }}
       >
-        <Layer />
         Clear
       </button>
     {/if}
-    <button class="send font-label-large" disabled={!prompt || Boolean(aborter)}>
-      <Layer />
+    <button class="send font-label-large layer" disabled={!prompt || Boolean(aborter)}>
       {aborter ? "Generating..." : "Send"}
     </button>
   </div>

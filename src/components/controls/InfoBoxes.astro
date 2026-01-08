@@ -1,6 +1,5 @@
 ---
 import If from "../jinja/If.astro";
-import Layer from "../Layer.astro";
 
 const credits = import.meta.env.DEV ? "2.00" : "{{ user_credits }}";
 const requestsRemaining = import.meta.env.DEV ? "100" : "{{ usable_requests }}";
@@ -23,8 +22,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
     </If>
     <p class="font-title-medium">Requests</p>
   </div>
-  <button class="box token">
-    <Layer />
+  <button class="box token layer">
     <pre class="token-data font-headline-small">nahcrof_██████████</pre>
     <p>API token; only shown once</p>
     <p class="fake-action font-title-medium">Regenerate</p>

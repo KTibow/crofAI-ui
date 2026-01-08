@@ -1,45 +1,41 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Layer from "../components/Layer.astro";
 ---
 
 <Layout title="Startup Credits">
   <form method="POST">
-      <h1 class="font-headline-large">Tell us about your startup</h1>
-      <label class="half">
-        <p>Startup Name</p>
-        <input name="startup_name" placeholder="CrofAI" required />
-      </label>
-      <label class="half">
-        <p>Company Website</p>
-        <input type="url" name="website" placeholder="https://example.com" required />
-      </label>
-      <label>
-        <p>Contact Email</p>
-        <input type="email" name="contact_email" placeholder="you@company.com" required />
-      </label>
-      <label>
-        <p>What problem are you solving? Who are your customers?</p>
-        <textarea
-          name="description"
-          placeholder="Describe your product, target market, stage, and traction."
-          rows="4"
-          required></textarea>
-      </label>
-      <label>
-        <p>How will you use CrofAI?</p>
-        <textarea
-          name="use_case"
-          placeholder="Describe your project and how our AI services will help you achieve your goals."
-          rows="4"
-          required></textarea>
-      </label>
+    <h1 class="font-headline-large">Tell us about your startup</h1>
+    <label class="half">
+      <p>Startup Name</p>
+      <input name="startup_name" placeholder="CrofAI" required />
+    </label>
+    <label class="half">
+      <p>Company Website</p>
+      <input type="url" name="website" placeholder="https://example.com" required />
+    </label>
+    <label>
+      <p>Contact Email</p>
+      <input type="email" name="contact_email" placeholder="you@company.com" required />
+    </label>
+    <label>
+      <p>What problem are you solving? Who are your customers?</p>
+      <textarea
+        name="description"
+        placeholder="Describe your product, target market, stage, and traction."
+        rows="4"
+        required></textarea>
+    </label>
+    <label>
+      <p>How will you use CrofAI?</p>
+      <textarea
+        name="use_case"
+        placeholder="Describe your project and how our AI services will help you achieve your goals."
+        rows="4"
+        required></textarea>
+    </label>
 
-      <button class="font-title-medium">
-        <Layer />
-        Apply for Credits
-      </button>
-    </form>
+    <button class="font-title-medium layer"> Apply for Credits </button>
+  </form>
 </Layout>
 
 <style>

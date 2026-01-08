@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Layer from "../components/Layer.astro";
 import If from "../components/jinja/If.astro";
 import Model from "../components/pricing/Model.astro";
 
@@ -305,11 +304,10 @@ const devModels = [
           <>
             <If condition={`plan == '${planId}'`}>
               <a
-                class="plan"
+                class="plan layer"
                 href="/plan-api/free"
                 onclick={`if(!confirm('Remove all ${name} priviliges?')){event.preventDefault()}`}
               >
-                <Layer />
                 <h3>
                   {name} • <span class="price">{price}</span>
                 </h3>
@@ -319,8 +317,7 @@ const devModels = [
             </If>
             <If condition={`plan != '${planId}'`}>
               <If condition="not loggedin">
-                <a class="plan" href="/signin">
-                  <Layer />
+                <a class="plan layer" href="/signin">
                   <h3>
                     {name} • <span class="price">{price}</span>
                   </h3>
@@ -330,11 +327,10 @@ const devModels = [
               </If>
               <If condition="loggedin">
                 <a
-                  class="plan"
+                  class="plan layer"
                   href={`/plan-api/${planId}`}
                   onclick={`if(!confirm('Subscribe to ${name}?')){event.preventDefault()}`}
                 >
-                  <Layer />
                   <h3>
                     {name} • <span class="price">{price}</span>
                   </h3>

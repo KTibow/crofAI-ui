@@ -1,5 +1,4 @@
 ---
-import Layer from "./Layer.astro";
 import If from "./jinja/If.astro";
 import { pages } from "../lib/pages";
 
@@ -13,8 +12,7 @@ const currentPath = Astro.url.pathname;
         const isSelected = currentPath == href;
         const navItem = (
           <a class="font-label-medium" href={href}>
-            <div class:list={{ content: true, selected: isSelected }}>
-              <Layer />
+            <div class:list={{ content: true, selected: isSelected, layer: true }}>
               <svg width="24" height="24" viewBox="0 0 24 24">
                 <Fragment set:html={icon} />
               </svg>
