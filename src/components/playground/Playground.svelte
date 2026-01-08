@@ -85,6 +85,7 @@
       body: JSON.stringify({
         model: allowFallbacks ? model : `${model}:consistent`,
         temperature,
+        top_p: topP,
         messages: apiMessages,
         stream: true,
       }),
