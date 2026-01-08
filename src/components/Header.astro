@@ -13,7 +13,7 @@ const { loggedIn } = Astro.props;
 <header>
   <nav>
     {
-      pages.map(({ href, title, icon, loggedInOnly }) => {
+      pages.map(({ href, title, icon, preferredLoggedIn }) => {
         const isSelected = currentPath == href;
         const navItem = (
           <a class="font-label-medium" href={href}>
@@ -26,15 +26,11 @@ const { loggedIn } = Astro.props;
           </a>
         );
 
-        if (!loggedInOnly) {
-          return navItem;
-        } else {
-          if (loggedIn != "auto") {
-            return loggedIn == "y" ? navItem : null;
-          } else {
-            return <If condition="loggedin">{navItem}</If>;
-          }
-        }
+        if (!preferredLoggedIn || preferredLoggedIn == loggedIn) return navItem;
+        if (loggedIn == "auto")
+          return (
+            <If condition={preferredLoggedIn == "y" ? "loggedin" : "not loggedin"}>{navItem}</If>
+          );
       })
     }
   </nav>

@@ -18,7 +18,7 @@ import { pages } from "../lib/pages";
     {
       pages
         .slice(1)
-        .filter(({ loggedInOnly }) => !loggedInOnly)
+        .filter(({ preferredLoggedIn }) => !preferredLoggedIn)
         .map(({ href, title }) => {
           return (
             <a class="font-title-medium layer" href={href}>
@@ -57,15 +57,14 @@ import { pages } from "../lib/pages";
       padding-inline: 1.8125rem;
       border-start-start-radius: 0.5rem;
       border-end-start-radius: 0.5rem;
-      > svg {
-        transition: rotate 100ms;
-      }
-      &:hover > svg {
-        rotate: 180deg;
-      }
     }
-    &:not(:hover) > .menu {
-      visibility: hidden;
+    > :nth-child(2) > svg {
+      transition: rotate 100ms;
+    }
+    &:is(:hover, :focus-visible) > :nth-child(2) > svg {
+      rotate: 180deg;
+    }
+    &:not(:hover, :focus-within) > .menu {
       opacity: 0;
     }
     > .menu {
