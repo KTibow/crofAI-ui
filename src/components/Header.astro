@@ -2,7 +2,12 @@
 import If from "./jinja/If.astro";
 import { pages } from "../lib/pages";
 
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(".html", ""); // price of disabling index.html
+
+interface Props {
+  loggedIn: "y" | "n" | "auto";
+}
+const { loggedIn } = Astro.props;
 ---
 
 <header>
@@ -21,7 +26,15 @@ const currentPath = Astro.url.pathname;
           </a>
         );
 
-        return loggedInOnly ? <If condition="loggedin">{navItem}</If> : navItem;
+        if (!loggedInOnly) {
+          return navItem;
+        } else {
+          if (loggedIn != "auto") {
+            return loggedIn == "y" ? navItem : null;
+          } else {
+            return <If condition="loggedin">{navItem}</If>;
+          }
+        }
       })
     }
   </nav>

@@ -1,6 +1,5 @@
 ---
 import { pages } from "../lib/pages";
-import If from "./jinja/If.astro";
 ---
 
 <div class="nav-button">
@@ -17,15 +16,16 @@ import If from "./jinja/If.astro";
   </div>
   <div class="menu">
     {
-      pages.slice(1).map(({ href, title, loggedInOnly }) => {
-        const menuItem = (
-          <a class="font-title-medium layer" href={href}>
-            {title}
-          </a>
-        );
-
-        return loggedInOnly ? <If condition="loggedin">{menuItem}</If> : menuItem;
-      })
+      pages
+        .slice(1)
+        .filter(({ loggedInOnly }) => !loggedInOnly)
+        .map(({ href, title }) => {
+          return (
+            <a class="font-title-medium layer" href={href}>
+              {title}
+            </a>
+          );
+        })
     }
   </div>
 </div>

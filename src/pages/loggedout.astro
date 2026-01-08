@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+import NavButton from "../components/NavButton.astro";
+---
+
+<Layout title="CrofAI: Affordable AI at Scale" includeHeader={false}>
+  <main>
+    <h1 class="font-display-large">
+      CrofAI: the<br /><em>cheapest</em> inference around
+    </h1>
+    <p>So cheap you might actually turn a profit :)</p>
+    <NavButton />
+  </main>
+</Layout>
+
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: min(80dvw, 80rem);
+    align-self: center;
+    margin-block: auto;
+  }
+  main .font-display-large {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  main em {
+    font-weight: 1000;
+    font-style: normal;
+    color: rgb(var(--m3-scheme-primary));
+  }
+  main p {
+    color: rgb(var(--m3-scheme-on-surface-variant));
+    margin-bottom: 2rem;
+  }
+</style>

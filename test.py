@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["flask"]
+# dependencies = ["flask", "requests"]
 # ///
 
 import secrets
@@ -7,7 +7,9 @@ import statistics
 import string
 from datetime import date, datetime, timedelta
 from math import floor
+from os.path import join
 
+import requests
 from flask import (  # I don't need all of these for this test but I was lazy
     Flask,
     Response,
@@ -17,9 +19,16 @@ from flask import (  # I don't need all of these for this test but I was lazy
     render_template,
     request,
     send_file,
+    send_from_directory,
     stream_with_context,
     url_for,
 )
+
+
+def render(template, **kwargs):
+    kwargs["loggedin"] = "login" in session
+    return render_template(f"{template}.html", **kwargs)
+
 
 app = Flask(__name__, template_folder="dist")
 
@@ -1094,9 +1103,49 @@ def get_month_name(month_num):
         raise ValueError("Month number must be between 1 and 12")
 
 
-@app.route("/home")
-def home_page():  # home_page is the landing page, home() is playground, this is also weird but oh well
-    return render_template("home.html", version=CURRENT_VERSION)
+@app.route("/")
+def home():
+    if "login" in session:
+        username = session["login"]
+        userdata = {  # normally pulled from db
+            "usable_requests": 250,  # this is the amount of requests the user has left for the day
+            "requests_plan": 250,  # this is the amount of requests the user is granted each day before using any
+            "free_requests": 12345,  # confusing but this is the total number of user all time requests
+        }
+
+        usable_requests = userdata.get("usable_requests")
+        requests_plan = userdata.get("requests_plan")
+
+        month = get_month_name(
+            current_month()
+        )  # there is a better way to do this, but I don't feel like changing it
+
+        free_requests = userdata["free_requests"]
+        return render(
+            "index",
+            free_requests=userdata["free_requests"],
+            month=month,
+            usable_requests=usable_requests,
+            requests_plan=requests_plan,
+        )
+    else:
+        return render("loggedout")
+
+
+@app.route("/playground")
+def playground():
+    return render("playground", models=openrouter_models()["data"], admin=False)
+
+
+# Static content
+@app.route("/docs")
+def docs():
+    return render("docs")
+
+
+@app.route("/privacy")
+def privacy_page():
+    return render("privacy")
 
 
 @app.route("/user-api/credits")
@@ -1107,32 +1156,6 @@ def user_credits_api():
         userdata["credits"] = 5
         return jsonify(money_format(userdata["credits"]))
     return "no"
-
-
-@app.route("/dashboard")
-def dashboard():
-    username = session["login"]
-    userdata = {  # normally pulled from db
-        "usable_requests": 250,  # this is the amount of requests the user has left for the day
-        "requests_plan": 250,  # this is the amount of requests the user is granted each day before using any
-        "free_requests": 12345,  # confusing but this is the total number of user all time requests
-    }
-
-    usable_requests = userdata.get("usable_requests")
-    requests_plan = userdata.get("requests_plan")
-
-    month = get_month_name(
-        current_month()
-    )  # there is a better way to do this, but I don't feel like changing it
-
-    free_requests = userdata["free_requests"]
-    return render_template(
-        "dashboard.html",
-        free_requests=userdata["free_requests"],
-        month=month,
-        usable_requests=usable_requests,
-        requests_plan=requests_plan,
-    )
 
 
 @app.route("/pricing")
@@ -1164,10 +1187,6 @@ def pricing():
         model["pricing"]["prompt"] = prompt_price
         model["pricing"]["completion"] = completion_price
 
-        # update context_data
-        model["context_length"] = comma_number(model["context_length"])
-        model["max_completion_tokens"] = comma_number(model["max_completion_tokens"])
-
     if "login" in session:
         if "plan" not in session:
             requests_plan = 250
@@ -1177,9 +1196,8 @@ def pricing():
                 session["plan"] = "hobby"
             if requests_plan == 1000:
                 session["plan"] = "pro"
-        return render_template(
-            "pricing.html",
-            loggedin=True,
+        return render(
+            "pricing",
             models=models,
             float=float,
             round=round,
@@ -1187,24 +1205,14 @@ def pricing():
             vision_models=vision_models,
         )
     else:
-        return render_template(
-            "pricing.html",
-            loggedin=False,
+        return render(
+            "pricing",
             models=models,
             float=float,
             round=round,
             plan="free",
             vision_models=vision_models,
         )
-
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    models = openrouter_models()["data"]
-    if "login" in session:
-        return render_template("playground.html", models=models, admin=False)
-    else:
-        return redirect("/home")
 
 
 @app.route("/user_api_create-token")
@@ -1217,16 +1225,6 @@ def create_token_api():  # normally does more stuff but for testing it just need
         return jsonify({"message": "success", "token": newtoken})
     else:  # state of the art security against anyone who'd try to make a token without being signed in
         return jsonify({"message": "no."}), 401
-
-
-@app.route("/privacy")
-def privacy_page():
-    return render_template("privacy.html")
-
-
-@app.route("/privacy/")
-def privacy_page2():
-    return render_template("privacy.html")
 
 
 @app.route("/startups", methods=["GET", "POST"])
@@ -1242,9 +1240,9 @@ def startups():
             f"\nSTARTUP REQUEST\ncompany name: {startup_name}\nwebsite: {website}\nemail: {email}\ndescription: ```{description}```\nuse for crofAI: ```{use_case}```"
         )
         # normally the form is sent to me but I'll just print it for now
-        return render_template("startups.html", success_message="Form sumbitted!")
+        return render("startups", success_message="Form sumbitted!")
     else:
-        return render_template("startups.html")
+        return render("startups")
 
 
 @app.route("/settings")
@@ -1264,8 +1262,8 @@ def settings():
             email = user["email"]
         except KeyError:
             email = None
-        return render_template(
-            "settings.html",
+        return render(
+            "settings",
             username=session["login"],
             user_credits=user_credits,
             email=email,
@@ -1334,7 +1332,7 @@ def login():
         password = request.form["password"]
         return redirect("/")
     else:
-        return render_template("signin.html")
+        return render("signin")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -1345,17 +1343,50 @@ def signup():
         password = request.form["password"]
         return redirect("/")
     else:
-        return render_template("signup.html")
+        return render("signup")
 
 
-@app.route("/ui/crofui.css")
-def crofuicss():
-    return redirect("https://ai.nahcrof.com/ui/crofui.css")
+STATIC_PATH = join(app.root_path, "dist", "_astro")
 
 
-@app.route("/ui/crofui.js")
-def crofuijs():
-    return redirect("https://ai.nahcrof.com/ui/crofui.js")
+@app.route("/_astro/<path:filename>")
+def serve_astro_assets(filename):
+    # max_age is in seconds (31536000 = 1 year)
+    return send_from_directory(STATIC_PATH, filename, max_age=31536000)
+
+
+@app.route(
+    "/v2/<path:path>", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+)
+def proxy_v2(path):
+    url = f"https://ai.nahcrof.com/v2/{path}"
+    response = requests.request(
+        method=request.method,
+        url=url,
+        headers={
+            k: v
+            for k, v in request.headers
+            if k.lower() not in ["host", "content-length", "accept-encoding"]
+        },
+        data=request.get_data(),
+        params=request.args,
+        allow_redirects=False,
+    )
+    return Response(
+        response.content,
+        status=response.status_code,
+        headers={
+            k: v
+            for k, v in response.headers.items()
+            if k.lower()
+            not in [
+                "content-encoding",
+                "transfer-encoding",
+                "connection",
+                "content-length",
+            ]
+        },
+    )
 
 
 app.run(host="0.0.0.0", port=8008)  # haha, nice

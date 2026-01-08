@@ -4,6 +4,10 @@ import svelte from "@astrojs/svelte";
 
 // https://astro.build/config
 export default defineConfig({
+  trailingSlash: "never",
+  build: {
+    format: "file",
+  },
   prefetch: {
     prefetchAll: true,
   },

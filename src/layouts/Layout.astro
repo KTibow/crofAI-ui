@@ -4,15 +4,25 @@ import Footer from "../components/Footer.astro";
 import "../styles/base.css";
 import icon from "../lib/icon.svg?url";
 
-interface Props {
+type HeaderProps =
+  | {
+      includeHeader?: true;
+      loggedIn: "y" | "n" | "auto";
+    }
+  | {
+      includeHeader: false;
+      loggedIn?: never;
+    };
+
+type Props = {
   title: string;
-  includeHeader?: boolean;
   includeFooter?: boolean;
   footerPushToBottom?: boolean;
-}
+} & HeaderProps;
 
 const {
   title,
+  loggedIn = "auto",
   includeHeader = true,
   includeFooter = true,
   footerPushToBottom = false,
@@ -28,7 +38,7 @@ const {
     <title>{title}</title>
   </head>
   <body>
-    {includeHeader && <Header />}
+    {includeHeader && <Header {loggedIn} />}
     <slot />
     {includeFooter && <Footer pushToBottom={footerPushToBottom} />}
     <script>

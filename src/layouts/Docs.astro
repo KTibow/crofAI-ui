@@ -5,7 +5,7 @@ import "../styles/prose.css";
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={frontmatter.title} footerPushToBottom={true}>
+<Layout title={frontmatter.title} footerPushToBottom={true} loggedIn="auto">
   <main class="prose">
     <slot />
   </main>
