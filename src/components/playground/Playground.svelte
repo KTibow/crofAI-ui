@@ -335,7 +335,6 @@
           color 200ms,
           opacity 200ms;
         pointer-events: auto;
-        position: relative;
       }
     }
 
