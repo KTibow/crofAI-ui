@@ -1338,12 +1338,9 @@ def login():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     # same situation as /signin here
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        return redirect("/")
-    else:
-        return render("signup")
+    username = request.form["username"]
+    password = request.form["password"]
+    return redirect("/")
 
 
 STATIC_PATH = join(app.root_path, "dist", "_astro")

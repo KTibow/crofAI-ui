@@ -3,9 +3,7 @@ import { pages } from "../lib/pages";
 ---
 
 <div class="nav-button">
-  <a class="font-headline-small layer" href={pages[0].href}>
-    Open {pages[0].title.toLowerCase()}
-  </a>
+  <a class="font-headline-small layer" href="/signin">Get API key</a>
   <div>
     <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24"
       ><path
@@ -64,7 +62,7 @@ import { pages } from "../lib/pages";
     &:is(:hover, :focus-visible) > :nth-child(2) > svg {
       rotate: 180deg;
     }
-    &:not(:hover, :focus-within) > .menu {
+    &:not(:hover, :has(a:focus-visible)) > .menu {
       opacity: 0;
     }
     > .menu {
