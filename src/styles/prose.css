@@ -16,7 +16,7 @@
   > pre {
     padding: 0.5rem;
     border-radius: 1rem;
-    background-color: rgb(var(--m3-scheme-surface-container)) !important;
+    background-color: var(--m3c-surface-container) !important;
     color: inherit !important;
   }
   > ul {
@@ -28,6 +28,6 @@
     padding-left: 1.5rem;
   }
   a {
-    color: rgb(var(--m3-scheme-primary));
+    color: var(--m3c-primary);
   }
 }

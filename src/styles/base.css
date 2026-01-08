@@ -1,67 +1,4 @@
 @import "@unocss/reset/tailwind-v4.css";
-:root,
-::backdrop {
-  --m3-scheme-background: 15 13 18;
-  --m3-scheme-on-background: 234 227 239;
-  --m3-scheme-surface: 15 13 18;
-  --m3-scheme-surface-dim: 15 13 18;
-  --m3-scheme-surface-bright: 46 43 52;
-  --m3-scheme-surface-container-lowest: 0 0 0;
-  --m3-scheme-surface-container-low: 20 18 24;
-  --m3-scheme-surface-container: 27 24 31;
-  --m3-scheme-surface-container-high: 33 30 38;
-  --m3-scheme-surface-container-highest: 39 36 45;
-  --m3-scheme-on-surface: 234 227 239;
-  --m3-scheme-on-surface-variant: 175 169 180;
-  --m3-scheme-outline: 120 115 126;
-  --m3-scheme-outline-variant: 74 70 80;
-  --m3-scheme-inverse-surface: 253 247 254;
-  --m3-scheme-inverse-on-surface: 87 84 89;
-  --m3-scheme-primary: 206 192 236;
-  --m3-scheme-primary-dim: 192 178 222;
-  --m3-scheme-on-primary: 69 58 95;
-  --m3-scheme-primary-container: 87 76 114;
-  --m3-scheme-on-primary-container: 234 222 255;
-  --m3-scheme-primary-fixed: 220 205 250;
-  --m3-scheme-primary-fixed-dim: 206 192 236;
-  --m3-scheme-on-primary-fixed: 59 48 84;
-  --m3-scheme-on-primary-fixed-variant: 87 77 114;
-  --m3-scheme-inverse-primary: 100 89 127;
-  --m3-scheme-secondary: 195 197 221;
-  --m3-scheme-secondary-dim: 181 183 207;
-  --m3-scheme-on-secondary: 60 63 82;
-  --m3-scheme-secondary-container: 55 58 77;
-  --m3-scheme-on-secondary-container: 188 190 213;
-  --m3-scheme-secondary-fixed: 223 225 249;
-  --m3-scheme-secondary-fixed-dim: 209 211 235;
-  --m3-scheme-on-secondary-fixed: 59 62 81;
-  --m3-scheme-on-secondary-fixed-variant: 88 90 111;
-  --m3-scheme-tertiary: 255 207 238;
-  --m3-scheme-tertiary-dim: 244 191 226;
-  --m3-scheme-on-tertiary: 105 65 95;
-  --m3-scheme-tertiary-container: 244 191 226;
-  --m3-scheme-on-tertiary-container: 96 57 85;
-  --m3-scheme-tertiary-fixed: 244 191 226;
-  --m3-scheme-tertiary-fixed-dim: 229 178 212;
-  --m3-scheme-on-tertiary-fixed: 74 38 65;
-  --m3-scheme-on-tertiary-fixed-variant: 106 66 95;
-  --m3-scheme-error: 249 115 134;
-  --m3-scheme-error-dim: 196 75 95;
-  --m3-scheme-on-error: 73 0 19;
-  --m3-scheme-error-container: 135 28 52;
-  --m3-scheme-on-error-container: 255 151 163;
-  --m3-scheme-shadow: 0 0 0;
-  --m3-scheme-scrim: 0 0 0;
-  --m3-scheme-on-on-primary: 206 191 236;
-  --m3-scheme-primary-container-subtle: 48 38 73;
-  --m3-scheme-on-primary-container-subtle: 178 164 207;
-  --m3-scheme-secondary-container-subtle: 40 43 61;
-  --m3-scheme-on-secondary-container-subtle: 168 170 193;
-  --m3-scheme-tertiary-container-subtle: 67 32 59;
-  --m3-scheme-on-tertiary-container-subtle: 206 156 190;
-  --m3-scheme-error-container-subtle: 95 0 28;
-  --m3-scheme-on-error-container-subtle: 255 135 150;
-}
 @font-face {
   font-family: Inter Variable;
   font-style: normal;
@@ -78,10 +15,50 @@
 }
 :root {
   color-scheme: dark;
-  background-color: rgb(var(--m3-scheme-background));
-  color: rgb(var(--m3-scheme-on-background));
-  accent-color: rgb(var(--m3-scheme-primary));
+  background-color: var(--m3c-surface);
+  color: var(--m3c-on-surface);
+  accent-color: var(--m3c-primary);
   font-family: "Inter Variable", system-ui;
+  --m3c-surface: #0f0d12;
+  --m3c-surface-container-lowest: #000;
+  --m3c-surface-container-low: #141218;
+  --m3c-surface-container: #1b181f;
+  --m3c-surface-container-high: #211e26;
+  --m3c-surface-container-highest: #27242d;
+  --m3c-on-surface: #eae3ef;
+  --m3c-on-surface-variant: #afa9b4;
+  --m3c-outline: #78737e;
+  --m3c-outline-variant: #4a4650;
+  --m3c-inverse-surface: #fdf7fe;
+  --m3c-inverse-on-surface: #575459;
+  --m3c-primary: #cec0ec;
+  --m3c-on-primary: #453a5f;
+  --m3c-primary-container: #574d72;
+  --m3c-on-primary-container: #eadeff;
+  --m3c-inverse-primary: #64597f;
+  --m3c-secondary: #ccc2db;
+  --m3c-on-secondary: #433d51;
+  --m3c-secondary-container: #3e384c;
+  --m3c-on-secondary-container: #c4bbd4;
+  --m3c-tertiary: #ffcfee;
+  --m3c-on-tertiary: #69415f;
+  --m3c-tertiary-container: #f4bfe3;
+  --m3c-on-tertiary-container: #603956;
+  --m3c-error: #f97386;
+  --m3c-on-error: #490013;
+  --m3c-error-container: #871c34;
+  --m3c-on-error-container: #ff97a3;
+  --m3c-shadow: #000;
+  --m3c-scrim: #000;
+  --m3c-on-on-primary: #cdbfec;
+  --m3c-primary-container-subtle: #302649;
+  --m3c-on-primary-container-subtle: #b2a4cf;
+  --m3c-secondary-container-subtle: #2f293c;
+  --m3c-on-secondary-container-subtle: #b0a7bf;
+  --m3c-tertiary-container-subtle: #43203b;
+  --m3c-on-tertiary-container-subtle: #ce9cbe;
+  --m3c-error-container-subtle: #5f001c;
+  --m3c-on-error-container-subtle: #ff8796;
 }
 body {
   display: flex;
@@ -131,8 +108,8 @@ body {
   font-weight: 400;
 }
 ::selection {
-  background-color: rgb(var(--m3-scheme-primary-container-subtle));
-  color: rgb(var(--m3-scheme-on-primary-container-subtle));
+  background-color: var(--m3c-primary-container-subtle);
+  color: var(--m3c-on-primary-container-subtle);
 }
 
 header {
@@ -154,18 +131,18 @@ nav {
       height: 2.5rem;
       padding-inline: 1rem;
       border-radius: 2rem;
-      color: rgb(var(--m3-scheme-on-surface-variant));
+      color: var(--m3c-on-surface-variant);
     }
     &.selected > .content {
-      background-color: rgb(var(--m3-scheme-secondary-container));
-      color: rgb(var(--m3-scheme-on-secondary-container));
+      background-color: var(--m3c-secondary-container);
+      color: var(--m3c-on-secondary-container);
     }
   }
 }
 footer {
   display: flex;
   justify-content: center;
-  color: rgb(var(--m3-scheme-on-surface-variant));
+  color: var(--m3c-on-surface-variant);
 
   > * {
     display: flex;
@@ -175,7 +152,7 @@ footer {
     gap: 0.5rem;
     transition: color 200ms;
     &:hover {
-      color: rgb(var(--m3-scheme-secondary));
+      color: var(--m3c-secondary);
     }
   }
 }

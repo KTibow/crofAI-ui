@@ -266,7 +266,7 @@
     align-self: center;
     &.user {
       .message-content {
-        background-color: rgb(var(--m3-scheme-primary-container-subtle));
+        background-color: var(--m3c-primary-container-subtle);
         padding: 0.5rem;
         border-radius: 1rem;
         p {
@@ -277,8 +277,8 @@
     &.assistant {
       align-self: flex-start;
       .reasoning {
-        background-color: rgb(var(--m3-scheme-tertiary-container-subtle));
-        color: rgb(var(--m3-scheme-on-tertiary-container-subtle));
+        background-color: var(--m3c-tertiary-container-subtle);
+        color: var(--m3c-on-tertiary-container-subtle);
         padding: 0.5rem;
         border-radius: 1rem;
         h3 {
@@ -288,7 +288,7 @@
       .message-stats {
         display: flex;
         gap: 1rem;
-        color: rgb(var(--m3-scheme-on-surface-variant));
+        color: var(--m3c-on-surface-variant);
       }
     }
   }
@@ -301,7 +301,7 @@
     bottom: 0;
 
     border-radius: 1rem 1rem 0 0;
-    background-color: rgb(var(--m3-scheme-surface-container-low));
+    background-color: var(--m3c-surface-container-low);
     textarea {
       resize: none;
       padding-block: 0.5rem 2.5rem;
@@ -324,8 +324,8 @@
         height: 2rem;
         border-radius: 1rem;
         padding-inline: 0.75rem;
-        background-color: rgb(var(--m3-scheme-surface-container-low) / 0.8);
-        color: rgb(var(--m3-scheme-on-surface-variant));
+        background-color: oklab(from var(--m3c-surface-container) l a b / 0.5);
+        color: var(--m3c-on-surface-variant);
 
         &:enabled {
           cursor: pointer;
@@ -343,13 +343,13 @@
       margin-right: auto;
     }
     select:hover {
-      color: rgb(var(--m3-scheme-on-background));
+      color: var(--m3c-on-surface);
     }
     .clear {
-      color: rgb(var(--m3-scheme-error));
+      color: var(--m3c-error);
     }
     .send {
-      color: rgb(var(--m3-scheme-primary));
+      color: var(--m3c-primary);
       &:disabled {
         opacity: 0.38;
       }
@@ -364,8 +364,8 @@
     > * {
       padding: 0.5rem;
       border-radius: 1rem;
-      background-color: rgb(var(--m3-scheme-surface-container-lowest));
-      color: rgb(var(--m3-scheme-on-surface-variant));
+      background-color: var(--m3c-surface-container-lowest);
+      color: var(--m3c-on-surface-variant);
     }
   }
 
@@ -394,7 +394,7 @@
     height: 100%;
     resize: none;
     padding: 2rem 0.5rem 0.5rem 0.5rem;
-    color: rgb(var(--m3-scheme-on-surface));
+    color: var(--m3c-on-surface);
     &:focus {
       outline: none;
     }

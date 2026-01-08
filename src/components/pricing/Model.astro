@@ -9,49 +9,42 @@ interface Props {
   speedStyle: string;
 }
 
-const {
-  id,
-  quantization,
-  contextDisplay,
-  promptPricing,
-  completionPricing,
-  speed,
-  speedStyle,
-} = Astro.props;
+const { id, quantization, contextDisplay, promptPricing, completionPricing, speed, speedStyle } =
+  Astro.props;
 
 const openTag = `<tr data-id="${id}" data-prompt="${promptPricing}" data-completion="${completionPricing}" data-speed="${speed}">`;
 const closeTag = `</tr>`;
 ---
 
 <Fragment set:html={openTag} />
-  <td>
-    <h2 class="font-title-medium">
-      <Fragment set:html={id} />
-      <button
-        class="copy-button"
-        onclick={`navigator.clipboard.writeText('${id}')`}
-        title="Copy model ID"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
-          ></path>
-        </svg>
-      </button>
-    </h2>
-    <div class="chips">
-      <div class="chip font-label-medium"><Fragment set:html={quantization} /></div>
-      <div class="chip font-label-medium">
-        <Fragment set:html={contextDisplay} />
-      </div>
+<td>
+  <h2 class="font-title-medium">
+    <Fragment set:html={id} />
+    <button
+      class="copy-button"
+      onclick={`navigator.clipboard.writeText('${id}')`}
+      title="Copy model ID"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6t.713.288T5 7v13h10q.425 0 .713.288T16 21t-.288.713T15 22zm4-6V4z"
+        ></path>
+      </svg>
+    </button>
+  </h2>
+  <div class="chips">
+    <div class="chip font-label-medium"><Fragment set:html={quantization} /></div>
+    <div class="chip font-label-medium">
+      <Fragment set:html={contextDisplay} />
     </div>
-  </td>
-  <td style="text-align: right"><Fragment set:html={`$${promptPricing}`} /></td>
-  <td style="text-align: right"><Fragment set:html={`$${completionPricing}`} /></td>
-  <td style={speedStyle}>
-    <Fragment set:html={speed} /> tps
-  </td>
+  </div>
+</td>
+<td style="text-align: right"><Fragment set:html={`$${promptPricing}`} /></td>
+<td style="text-align: right"><Fragment set:html={`$${completionPricing}`} /></td>
+<td style={speedStyle}>
+  <Fragment set:html={speed} /> tps
+</td>
 <Fragment set:html={closeTag} />
 
 <style>
@@ -78,7 +71,7 @@ const closeTag = `</tr>`;
     align-items: center;
     padding-inline: 0.5rem;
     border-radius: 9999px;
-    background-color: rgb(var(--m3-scheme-primary-container-subtle));
-    color: rgb(var(--m3-scheme-on-primary-container-subtle));
+    background-color: var(--m3c-primary-container-subtle);
+    color: var(--m3c-on-primary-container-subtle);
   }
 </style>

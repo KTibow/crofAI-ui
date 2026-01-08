@@ -66,7 +66,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
     padding: 0.5rem;
     border-radius: 1.5rem;
 
-    background-color: rgb(var(--m3-scheme-surface-container-low));
+    background-color: var(--m3c-surface-container-low);
 
     > .font-headline-small {
       margin-bottom: 1rem;
@@ -75,7 +75,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
       margin-top: auto;
     }
     > :not(.font-headline-small, .font-title-medium) {
-      color: rgb(var(--m3-scheme-on-surface-variant));
+      color: var(--m3c-on-surface-variant);
     }
   }
   .token {
@@ -84,7 +84,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
     text-align: start;
   }
   .fake-action {
-    color: rgb(var(--m3-scheme-primary));
+    color: var(--m3c-primary);
   }
 
   .hboxes {
