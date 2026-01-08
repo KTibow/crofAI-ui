@@ -68,11 +68,9 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
 
     background-color: var(--m3c-surface-container-low);
 
-    > .font-headline-small {
-      margin-bottom: 1rem;
-    }
-    > .font-title-medium {
+    > :nth-child(2) {
       margin-top: auto;
+      padding-top: 1rem;
     }
     > :not(.font-headline-small, .font-title-medium) {
       color: var(--m3c-on-surface-variant);
@@ -88,6 +86,9 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
 
   .hboxes {
     display: flex;
+    @media (width < 40rem) {
+      flex-direction: column;
+    }
     gap: 0.5rem;
     > * {
       flex: 1;
