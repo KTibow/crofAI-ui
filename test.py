@@ -34,7 +34,7 @@ app = Flask(__name__, template_folder="dist")
 
 number = 1712028000000  # got lazy, forgot I did this. there's a reason newer models don't use this
 
-session = {}  # feel free to play with these values
+session = {"login": "test", "plan": "hobby"}  # feel free to play with these values
 
 # this can be set to "main" or "test".
 CURRENT_VERSION = "main"

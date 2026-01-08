@@ -3,7 +3,7 @@ layout: ../layouts/Docs.astro
 title: Privacy Policy
 ---
 
-**Last Updated: July 2025**
+*Last Updated: July 2025*
 
 This privacy policy ("Privacy Policy") outlines the rules for using data collected when you ("you" or "your") use our services, visit our websites including https://ai.nahcrof.com ("Website"), use our APIs ("APIs"), and other services (collectively referred to as the "Services").
 
