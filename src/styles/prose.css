@@ -18,6 +18,21 @@
     border-radius: 1rem;
     background-color: var(--m3c-surface-container) !important;
     color: inherit !important;
+    position: relative;
+    > .copy {
+      position: absolute;
+      inset: 0 0 auto auto;
+
+      padding: 0.5rem;
+      line-height: 1;
+      border-radius: 1rem;
+      cursor: pointer;
+      background-color: var(--m3c-surface-container-highest);
+      transition: opacity 0.2s;
+    }
+    &:not(:hover) > .copy {
+      opacity: 0;
+    }
   }
   > ul {
     list-style-type: disc;

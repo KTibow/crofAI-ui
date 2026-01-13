@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import svelte from "@astrojs/svelte";
+import { copyCode } from "./rehype-plugin-copy-code";
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,6 +11,9 @@ export default defineConfig({
   },
   prefetch: {
     prefetchAll: true,
+  },
+  markdown: {
+    rehypePlugins: [copyCode],
   },
   integrations: [svelte()],
   vite: {
