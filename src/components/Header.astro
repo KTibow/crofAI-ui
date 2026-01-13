@@ -43,32 +43,33 @@ const { loggedIn } = Astro.props;
 
   nav {
     display: flex;
+    justify-content: center;
     @media (width < 40rem) {
       flex-direction: column;
     }
     @media (width >= 40rem) {
       gap: 0.5rem;
     }
-    align-items: center;
-  }
 
-  a {
-    display: flex;
-    align-items: center;
-    height: 4rem;
-  }
-
-  .content {
-    display: flex;
-    align-items: center;
-    height: 2.5rem;
-    border-radius: 1.25rem;
-    gap: 0.5rem;
-    padding-inline: 1rem;
-  }
-
-  .content.selected {
-    background-color: var(--m3c-secondary-container);
-    color: var(--m3c-on-secondary-container);
+    > * {
+      display: grid;
+      place-content: center;
+      @media (width >= 40rem) {
+        height: 4rem;
+      }
+      > .content {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 2.5rem;
+        padding-inline: 1rem;
+        border-radius: 2rem;
+        color: var(--m3c-on-surface-variant);
+        &.selected {
+          background-color: var(--m3c-secondary-container);
+          color: var(--m3c-on-secondary-container);
+        }
+      }
+    }
   }
 </style>
