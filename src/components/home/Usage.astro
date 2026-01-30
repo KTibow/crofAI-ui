@@ -1,23 +1,38 @@
 ---
 import If from "../jinja/If.astro";
+
+const credits = import.meta.env.DEV ? "2.00" : "{{ user_credits }}";
+const requestsRemaining = import.meta.env.DEV ? "100" : "{{ usable_requests }}";
+const requestsTotal = import.meta.env.DEV ? "250" : "{{ requests_plan }}";
+const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
 ---
 
-<h2 class="font-headline-large">Billing</h2>
-<div class="box">
+<div class="grid">
+  <div class="box">
+    <p class="font-headline-small">$<span class="credits">{credits}</span></p>
+    <h2 class="font-title-medium">Credits</h2>
+  </div>
+  <div class="box">
+    <If condition="usable_requests != None">
+      <p class="font-headline-small">{requestsRemaining}/{requestsTotal} this month</p>
+      <p>({requestsAllTime} used all time)</p>
+    </If>
+    <If condition="usable_requests == None">
+      <p class="font-headline-small">{requestsAllTime} all time</p>
+    </If>
+    <p class="font-title-medium">Requests</p>
+  </div>
   <div class="tokens-anchor">Loading...</div>
-  <p class="font-title-medium">Tokens this month</p>
-</div>
-<div class="box">
-  <If condition="email">
-    <p>TODO</p>
-  </If>
-  <If condition="not email">
-    <p>Add a billing email first.</p>
-    <p>TODO</p>
-  </If>
-  <h2 class="font-title-medium">Top up credits</h2>
 </div>
 
+<script>
+  const creditsElement = document.querySelector(".credits")!;
+  setInterval(async () => {
+    const r = await fetch("/user-api/credits");
+    const newCredits = await r.json();
+    creditsElement.textContent = newCredits;
+  }, 10000);
+</script>
 <script>
   const tokensAnchor = document.querySelector(".tokens-anchor")!;
   const loadTokens = async () => {
@@ -33,7 +48,8 @@ import If from "../jinja/If.astro";
         model,
         ...data,
       }))
-      .sort((a, b) => b.total_tokens - a.total_tokens);
+      .sort((a, b) => b.total_tokens - a.total_tokens)
+      .slice(0, 12);
 
     const maxTokens = Math.max(...modelData.map((d) => d.total_tokens), 1);
 
@@ -43,15 +59,14 @@ import If from "../jinja/If.astro";
         const inputPercent = (data.input_tokens / maxTokens) * 100;
         const outputPercent = (data.output_tokens / maxTokens) * 100;
 
-        return `
-<div class="token-row font-body-medium">
+        return `<div class="token-row font-body-medium">
   <div class="token-label">${data.model}</div>
   <div class="token-bar">
     <div class="token-input" title="Input" style="width: ${inputPercent}%"></div>
     <div class="token-output" title="Output" style="width: ${outputPercent}%"></div>
   </div>
   <div class="token-total">${data.total_tokens.toLocaleString()}</div>
-</div>`.trimStart();
+</div>`;
       })
       .join("");
   };
@@ -59,19 +74,36 @@ import If from "../jinja/If.astro";
 </script>
 
 <style>
+  .grid {
+    display: grid;
+    gap: 0.5rem;
+
+    @media (width >= 40rem) {
+      grid-template-columns: 10rem 1fr;
+    }
+
+    margin-top: 1.5rem;
+
+    width: min(calc(100% - 2rem), 50rem);
+    align-self: center;
+  }
+
   .box {
     display: flex;
     flex-direction: column;
     padding: 0.5rem;
     border-radius: 1.5rem;
+    min-height: 10rem;
 
     background-color: var(--m3c-surface-container-low);
+    grid-column: 1;
 
-    > .font-headline-small {
-      margin-bottom: 1rem;
-    }
-    > :last-child {
+    > :nth-child(2) {
       margin-top: auto;
+      padding-top: 1rem;
+    }
+    > :not(.font-headline-small, .font-title-medium) {
+      color: var(--m3c-on-surface-variant);
     }
   }
 
@@ -79,7 +111,15 @@ import If from "../jinja/If.astro";
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
+
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+    background-color: var(--m3c-surface-container-low);
+
+    @media (width >= 40rem) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
   }
 
   :global(.token-row) {

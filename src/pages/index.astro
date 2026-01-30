@@ -1,13 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import InfoBoxes from "../components/controls/InfoBoxes.astro";
-import Billing from "../components/controls/Billing.astro";
-import Account from "../components/controls/Account.astro";
+import Actions from "../components/home/Actions.astro";
+import Usage from "../components/home/Usage.astro";
+import Billing from "../components/home/Billing.astro";
+import Account from "../components/home/Account.astro";
 ---
 
-<Layout title="Controls" footerPushToBottom={true} loggedIn="y">
+<Layout title="Home" footerPushToBottom={true} loggedIn="y">
+  <Actions />
+  <Usage />
   <main>
-    <InfoBoxes />
     <Billing />
     <Account />
   </main>

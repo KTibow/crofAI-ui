@@ -1,0 +1,33 @@
+---
+import If from "../jinja/If.astro";
+---
+
+<h2 class="font-headline-large">Billing</h2>
+<div class="box">
+  <If condition="email">
+    <p>TODO</p>
+  </If>
+  <If condition="not email">
+    <p>Add a billing email first.</p>
+    <p>TODO</p>
+  </If>
+  <h2 class="font-title-medium">Top up credits</h2>
+</div>
+
+<style>
+  .box {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+
+    background-color: var(--m3c-surface-container-low);
+
+    > .font-headline-small {
+      margin-bottom: 1rem;
+    }
+    > :last-child {
+      margin-top: auto;
+    }
+  }
+</style>

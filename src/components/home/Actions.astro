@@ -1,0 +1,47 @@
+<a href="/playground" class="action layer font-headline-large"
+  >Playground<span class="icon">→</span></a
+>
+<button id="key" class="action layer font-headline-large"
+  >New API key<span class="icon">⋯</span></button
+>
+
+<script>
+  const keyElement = document.getElementById("key") as HTMLButtonElement;
+  keyElement.onclick = async () => {
+    const r = await fetch("/user_api_create-token");
+    if (!r.ok) throw new Error("Failed to regenerate API token");
+    const { token } = await r.json();
+
+    keyElement.textContent = "Copy";
+    keyElement.onclick = () => {
+      navigator.clipboard.writeText(token);
+      keyElement.textContent = "Copied!";
+      setTimeout(() => {
+        keyElement.textContent = "Copy API key";
+      }, 2000);
+    };
+  };
+</script>
+<style>
+  .action {
+    display: flex;
+    padding-block: 1rem;
+    padding-inline: 0.75rem;
+    border-radius: 1.5rem;
+
+    background-color: var(--m3c-primary-container-subtle);
+    color: var(--m3c-on-primary-container-subtle);
+
+    margin-top: 0.5rem;
+
+    width: min(calc(100% - 2rem), 60rem);
+    align-self: center;
+    cursor: pointer;
+  }
+  .icon {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1 / 1;
+    margin-left: auto;
+  }
+</style>
