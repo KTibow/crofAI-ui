@@ -14,13 +14,17 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
   </div>
   <div class="box">
     <If condition="usable_requests != None">
-      <p class="font-headline-small">{requestsRemaining}/{requestsTotal} this month</p>
-      <p>({requestsAllTime} used all time)</p>
+      <p class="font-headline-small">
+        {requestsRemaining}
+        <span class="deemph">remain of {requestsTotal}</span>
+      </p>
+      <p>({requestsAllTime} ever)</p>
+      <p class="font-title-medium">Requests</p>
     </If>
     <If condition="usable_requests == None">
-      <p class="font-headline-small">{requestsAllTime} all time</p>
+      <p class="font-headline-small">{requestsAllTime}</p>
+      <p class="font-title-medium">Requests ever</p>
     </If>
-    <p class="font-title-medium">Requests</p>
   </div>
   <div class="tokens-anchor">Loading...</div>
 </div>
@@ -49,7 +53,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
         ...data,
       }))
       .sort((a, b) => b.total_tokens - a.total_tokens)
-      .slice(0, 12);
+      .slice(0, 10);
 
     const maxTokens = Math.max(...modelData.map((d) => d.total_tokens), 1);
 
@@ -59,7 +63,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
         const inputPercent = (data.input_tokens / maxTokens) * 100;
         const outputPercent = (data.output_tokens / maxTokens) * 100;
 
-        return `<div class="token-row font-body-medium">
+        return `<div class="token-row font-label-medium">
   <div class="token-label">${data.model}</div>
   <div class="token-bar">
     <div class="token-input" title="Input" style="width: ${inputPercent}%"></div>
@@ -76,16 +80,11 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
 <style>
   .grid {
     display: grid;
-    gap: 0.5rem;
+    gap: 1em;
 
     @media (width >= 40rem) {
       grid-template-columns: 10rem 1fr;
     }
-
-    margin-top: 1.5rem;
-
-    width: min(calc(100% - 2rem), 50rem);
-    align-self: center;
   }
 
   .box {
@@ -98,12 +97,13 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
     background-color: var(--m3c-surface-container-low);
     grid-column: 1;
 
-    > :nth-child(2) {
-      margin-top: auto;
-      padding-top: 1rem;
-    }
-    > :not(.font-headline-small, .font-title-medium) {
+    > :not(.font-headline-small),
+    .deemph {
       color: var(--m3c-on-surface-variant);
+    }
+    > :last-child {
+      padding-top: 1rem;
+      margin-top: auto;
     }
   }
 
@@ -125,6 +125,7 @@ const requestsAllTime = import.meta.env.DEV ? "999" : "{{ free_requests }}";
   :global(.token-row) {
     display: grid;
     grid-template-columns: 8rem 1fr auto;
+    line-height: 2;
     height: 1lh;
     gap: 0.5rem;
   }

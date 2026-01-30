@@ -6,16 +6,43 @@ import Billing from "../components/home/Billing.astro";
 import Account from "../components/home/Account.astro";
 ---
 
-<Layout title="Home" footerPushToBottom={true} loggedIn="y">
-  <Actions />
-  <Usage />
-  <main>
-    <Billing />
-    <Account />
-  </main>
+<Layout title="Home" footerPushToBottom={true} includeHeader={false}>
+  <div class="wrap">
+    <div class="stack">
+      <Actions />
+    </div>
+    <main>
+      <Usage />
+      <Billing />
+      <Account />
+    </main>
+  </div>
 </Layout>
 
 <style>
+  .wrap {
+    display: grid;
+    @media (width >= 60rem) {
+      grid-template-columns: 2fr 3fr;
+    }
+    padding: 1.5rem;
+    gap: 1.5rem;
+    flex: 1;
+  }
+  .stack {
+    display: flex;
+    flex-direction: column;
+    place-self: center;
+    gap: 0.25rem;
+  }
+  .stack > :global(:first-child) {
+    height: 6rem;
+    background-color: var(--m3c-primary-container-subtle);
+    color: var(--m3c-on-primary-container-subtle);
+  }
+  .stack > :global(:nth-child(2)) {
+    height: 4rem;
+  }
   main {
     display: flex;
     flex-direction: column;
@@ -23,9 +50,8 @@ import Account from "../components/home/Account.astro";
     width: 100%;
     max-width: 50rem;
     align-self: center;
-
-    > * {
-      margin-top: 1em;
-    }
+  }
+  main > :global(:not(:first-child)) {
+    margin-top: 1em;
   }
 </style>

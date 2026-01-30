@@ -1,9 +1,20 @@
-<a href="/playground" class="action layer font-headline-large"
-  >Playground<span class="icon">→</span></a
->
-<button id="key" class="action layer font-headline-large"
-  >New API key<span class="icon">⋯</span></button
->
+---
+import { pages } from "../../lib/pages";
+---
+
+<button id="key" class="action layer font-headline-large">New API key<span>⋯</span></button>
+{
+  pages
+    .filter((p) => p.preferredLoggedIn != "n" && p.href != "/")
+    .map(({ href, title, icon }) => (
+      <a href={href} class="action layer font-headline-small">
+        {title}
+        <svg width="1em" height="1em" viewBox="0 0 24 24">
+          <Fragment set:html={icon} />
+        </svg>
+      </a>
+    ))
+}
 
 <script>
   const keyElement = document.getElementById("key") as HTMLButtonElement;
@@ -25,23 +36,21 @@
 <style>
   .action {
     display: flex;
-    padding-block: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    height: 3rem;
+    gap: 1rem;
     padding-inline: 0.75rem;
     border-radius: 1.5rem;
 
-    background-color: var(--m3c-primary-container-subtle);
-    color: var(--m3c-on-primary-container-subtle);
+    background-color: var(--m3c-surface-container);
+    color: var(--m3c-on-surface-variant);
 
-    margin-top: 0.5rem;
-
-    width: min(calc(100% - 2rem), 60rem);
-    align-self: center;
     cursor: pointer;
   }
   .icon {
     display: grid;
     place-items: center;
     aspect-ratio: 1 / 1;
-    margin-left: auto;
   }
 </style>
