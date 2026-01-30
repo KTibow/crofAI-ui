@@ -8,8 +8,10 @@ import Account from "../components/home/Account.astro";
 
 <Layout title="Home" footerPushToBottom={true} includeHeader={false}>
   <div class="wrap">
-    <div class="stack">
-      <Actions />
+    <div class="stack-wrapper">
+      <div class="stack">
+        <Actions />
+      </div>
     </div>
     <main>
       <Usage />
@@ -25,9 +27,21 @@ import Account from "../components/home/Account.astro";
     @media (width >= 60rem) {
       grid-template-columns: 2fr 3fr;
     }
-    padding: 1.5rem;
     gap: 1.5rem;
+    width: min(calc(100% - 3rem), 100rem);
+    align-self: center;
     flex: 1;
+  }
+  .stack-wrapper {
+    display: grid;
+    @media (width < 60rem) {
+      margin-block: 1.5rem;
+    }
+    @media (width >= 60rem) {
+      position: sticky;
+      top: 0;
+      max-height: 100dvh;
+    }
   }
   .stack {
     display: flex;
@@ -47,9 +61,10 @@ import Account from "../components/home/Account.astro";
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: 100%;
-    max-width: 50rem;
-    align-self: center;
+    @media (width >= 60rem) {
+      margin-block: 10rem;
+      align-self: center;
+    }
   }
   main > :global(:not(:first-child)) {
     margin-top: 1em;
