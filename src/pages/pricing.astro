@@ -18,31 +18,103 @@ const plans = [
   },
 ];
 
-// Dev data
 const devModels = [
   {
+    id: "kimi-k2.5",
+    quantization: "int4",
+    context_length: 131072,
+    max_completion_tokens: 131072,
+    pricing: { prompt: "0.45", completion: "2.00" },
+    speed: 23,
+    vision: true,
+  },
+  {
     id: "kimi-k2-thinking",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 262144,
     max_completion_tokens: 262144,
-    pricing: { prompt: "0.00", completion: "0.00" },
-    speed: 77,
+    pricing: { prompt: "0.40", completion: "1.50" },
+    speed: 55,
   },
   {
     id: "kimi-k2-thinking-turbo",
+    quantization: "fp8",
+    context_length: 262144,
+    max_completion_tokens: 262144,
+    pricing: { prompt: "1.00", completion: "3.00" },
+    speed: 242,
+  },
+  {
+    id: "glm-4.7-flash-eco",
+    quantization: "fp8",
+    context_length: 31488,
+    max_completion_tokens: 8192,
+    pricing: { prompt: "0.00", completion: "0.00" },
+    speed: 91,
+  },
+  {
+    id: "glm-4.7",
     quantization: "fp4",
-    context_length: 131072,
-    max_completion_tokens: 131072,
-    pricing: { prompt: "1.00", completion: "2.25" },
-    speed: 15,
+    context_length: 202752,
+    max_completion_tokens: 202752,
+    pricing: { prompt: "0.40", completion: "1.40" },
+    speed: 80,
+  },
+  {
+    id: "glm-4.7-canopy",
+    quantization: "fp8",
+    context_length: 202752,
+    max_completion_tokens: 202752,
+    pricing: { prompt: "0.50", completion: "2.10" },
+    speed: 62,
+  },
+  {
+    id: "deepseek-v3.2",
+    quantization: "Q4_0",
+    context_length: 163840,
+    max_completion_tokens: 163840,
+    pricing: { prompt: "0.28", completion: "0.38" },
+    speed: 111,
+  },
+  {
+    id: "deepseek-v3.2-chat",
+    quantization: "Q4_0",
+    context_length: 163840,
+    max_completion_tokens: 163840,
+    pricing: { prompt: "0.28", completion: "0.38" },
+    speed: 7,
+  },
+  {
+    id: "deepseek-v3.2-canopy",
+    quantization: "fp8",
+    context_length: 163840,
+    max_completion_tokens: 163840,
+    pricing: { prompt: "0.35", completion: "0.45" },
+    speed: 43,
+  },
+  {
+    id: "deepseek-v3.2-speciale",
+    quantization: "Q4_0",
+    context_length: 163840,
+    max_completion_tokens: 163840,
+    pricing: { prompt: "0.35", completion: "0.45" },
+    speed: 151,
+  },
+  {
+    id: "devstral-2",
+    quantization: "fp8",
+    context_length: 262144,
+    max_completion_tokens: 262144,
+    pricing: { prompt: "0.07", completion: "0.31" },
+    speed: 172,
   },
   {
     id: "kimi-k2-0905",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.15", completion: "0.55" },
-    speed: 33,
+    speed: 232,
   },
   {
     id: "kimi-k2-0905-turbo",
@@ -50,7 +122,7 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: "0.35", completion: "1.00" },
-    speed: 685,
+    speed: 144,
   },
   {
     id: "glm-4.6-turbo",
@@ -58,39 +130,39 @@ const devModels = [
     context_length: 202752,
     max_completion_tokens: 202752,
     pricing: { prompt: "0.50", completion: "2.25" },
-    speed: 25,
+    speed: 99,
   },
   {
-    id: "minimax-m2",
+    id: "minimax-m2.1",
+    quantization: "awq",
+    context_length: 131072,
+    max_completion_tokens: 131072,
+    pricing: { prompt: "0.28", completion: "0.90" },
+    speed: 48,
+  },
+  {
+    id: "minimax-m2.1-canopy",
     quantization: "fp8",
     context_length: 196608,
     max_completion_tokens: 196608,
-    pricing: { prompt: "0.00", completion: "0.00" },
-    speed: 140,
+    pricing: { prompt: "0.35", completion: "1.27" },
+    speed: 164,
   },
   {
-    id: "deepseek-v3.1:free",
-    quantization: "fp8",
+    id: "intellect-3",
+    quantization: "Q8_0",
     context_length: 128000,
     max_completion_tokens: 128000,
-    pricing: { prompt: "0.00", completion: "0.00" },
-    speed: 79,
-  },
-  {
-    id: "qwen3-coder:free",
-    quantization: "fp8",
-    context_length: 256000,
-    max_completion_tokens: 256000,
-    pricing: { prompt: "0.00", completion: "0.00" },
-    speed: 73,
+    pricing: { prompt: "0.15", completion: "1.00" },
+    speed: 97,
   },
   {
     id: "kimi-k2-eco",
-    quantization: "fp4",
+    quantization: "Q2_k",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.05", completion: "0.10" },
-    speed: 16,
+    speed: 4,
   },
   {
     id: "glm-4.6",
@@ -98,7 +170,7 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.30", completion: "0.60" },
-    speed: 129,
+    speed: 182,
   },
   {
     id: "glm-4.5",
@@ -106,111 +178,111 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.20", completion: "0.40" },
-    speed: 165,
+    speed: 232,
   },
   {
     id: "ring-1t",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.40", completion: "1.00" },
-    speed: 112,
+    speed: 166,
   },
   {
     id: "deepseek-v3.2-exp",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.15", completion: "0.30" },
-    speed: 164,
+    speed: 37,
   },
   {
     id: "deepseek-v3.1-terminus",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.20", completion: "0.50" },
-    speed: 26,
+    speed: 14,
   },
   {
     id: "deepseek-v3.1-terminus-reasoner",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.20", completion: "0.50" },
-    speed: 45,
+    speed: 561,
   },
   {
     id: "deepseek-v3.1",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.15", completion: "0.50" },
-    speed: 8,
+    speed: 9,
   },
   {
     id: "deepseek-v3.1-reasoner",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.15", completion: "0.50" },
-    speed: 88,
+    speed: 122,
   },
   {
     id: "deepseek-v3-0324",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: "0.20", completion: "0.25" },
-    speed: 33,
+    speed: 242,
   },
   {
     id: "deepseek-v3-0324-turbo",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: "0.50", completion: "1.00" },
-    speed: 22,
+    speed: 576,
   },
   {
     id: "deepseek-r1-0528",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.25", completion: "0.25" },
-    speed: 33,
+    speed: 80,
   },
   {
     id: "deepseek-r1-0528-turbo",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "1.00", completion: "2.00" },
-    speed: 125,
+    speed: 40,
   },
   {
     id: "qwen3-next-80b-a3b-instruct",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 262144,
     max_completion_tokens: 262144,
     pricing: { prompt: "0.08", completion: "0.38" },
-    speed: 24,
+    speed: 174,
   },
   {
     id: "qwen3-235b-a22b-2507-instruct",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.10", completion: "0.25" },
-    speed: 96,
+    speed: 328,
   },
   {
     id: "qwen3-235b-a22b-2507-thinking",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.10", completion: "0.30" },
-    speed: 40,
+    speed: 482,
   },
   {
     id: "qwen3-coder",
@@ -218,7 +290,7 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.15", completion: "0.35" },
-    speed: 71,
+    speed: 252,
   },
   {
     id: "qwen3-coder-turbo",
@@ -226,31 +298,32 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.20", completion: "0.50" },
-    speed: 254,
+    speed: 238,
   },
   {
     id: "gpt-oss-120b",
-    quantization: "fp4",
+    quantization: "Q4_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.07", completion: "0.27" },
-    speed: 148,
+    speed: 327,
   },
   {
     id: "gpt-oss-safeguard-120b",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.07", completion: "0.27" },
-    speed: 135,
+    speed: 263,
   },
   {
     id: "gemma-3-27b-it",
-    quantization: "fp8",
+    quantization: "Q8_0",
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: "0.04", completion: "0.10" },
-    speed: 81,
+    speed: 38,
+    vision: true,
   },
   {
     id: "llama-4-scout",
@@ -258,7 +331,8 @@ const devModels = [
     context_length: 262144,
     max_completion_tokens: 16384,
     pricing: { prompt: "0.08", completion: "0.40" },
-    speed: 65,
+    speed: 116,
+    vision: true,
   },
   {
     id: "llama3.3-70b",
@@ -266,23 +340,23 @@ const devModels = [
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: "0.12", completion: "0.20" },
-    speed: 31,
+    speed: 138,
   },
   {
     id: "deepseek-r1-distill-llama-70b",
-    quantization: "fp4",
+    quantization: "fp8",
     context_length: 65536,
     max_completion_tokens: 65536,
     pricing: { prompt: "0.10", completion: "0.10" },
-    speed: 64,
+    speed: 109,
   },
   {
     id: "deepseek-r1-distill-qwen-32b",
-    quantization: "fp4",
+    quantization: "fp8",
     context_length: 65536,
     max_completion_tokens: 65536,
     pricing: { prompt: "0.10", completion: "0.10" },
-    speed: 65,
+    speed: 167,
   },
   {
     id: "stok-0.4.1",
@@ -290,7 +364,7 @@ const devModels = [
     context_length: 2048,
     max_completion_tokens: 2048,
     pricing: { prompt: "0.00", completion: "0.00" },
-    speed: 4720,
+    speed: 3923,
   },
 ];
 ---
@@ -457,6 +531,88 @@ const devModels = [
 
       rows.forEach((row) => tbody.appendChild(row));
     }
+  </script>
+  <script>
+    function normalizeModelId(id: string): string {
+      let n = id.split("/").pop()!.split(":")[0];
+      const suffixes = ["-turbo", "-eco", "-canopy", "-ultra", "-lite", "-fast"];
+      for (const s of suffixes) {
+        if (n.endsWith(s)) {
+          n = n.slice(0, -s.length);
+          break;
+        }
+      }
+      n = n.replace("deepseek-v3", "deepseek-chat-v3");
+      if (n == "llama3.3-70b") {
+        n = "llama-3.3-70b-instruct";
+      }
+      if (n == "devstral-2") {
+        n = "devstral-2512";
+      }
+      if (n == "qwen3-235b-a22b-2507") {
+        n = "qwen3-235b-a22b-2507-instruct";
+      }
+      if (n == "qwen3-235b-a22b-thinking-2507") {
+        n = "qwen3-235b-a22b-2507-thinking";
+      }
+      return n;
+    }
+
+    async function enhanceWithPriceComparison() {
+      const response = await fetch("https://openrouter.ai/api/v1/models");
+      if (!response.ok) return;
+
+      const { data: orModels } = await response.json();
+
+      document.querySelectorAll("#models-tbody tr").forEach((row) => {
+        const modelId = row.getAttribute("data-id");
+        if (!modelId) return;
+
+        const ourPrompt = parseFloat(row.getAttribute("data-prompt") || "0");
+        const ourCompletion = parseFloat(row.getAttribute("data-completion") || "0");
+        const isFree = ourPrompt == 0 && ourCompletion == 0;
+        const normalizedId = normalizeModelId(modelId);
+
+        let minP = Infinity,
+          minC = Infinity;
+        for (const m of orModels || []) {
+          if (!m.pricing) continue;
+          if (!isFree && m.id.endsWith(":free")) continue;
+          if (normalizeModelId(m.id) == normalizedId) {
+            minP = Math.min(minP, parseFloat(m.pricing.prompt) * 1e6);
+            minC = Math.min(minC, parseFloat(m.pricing.completion) * 1e6);
+          }
+        }
+
+        const container = row.querySelector(".chips")!;
+        if (minP == Infinity) {
+          console.debug(`No OpenRouter pricing found for model ${modelId}`);
+          return;
+        }
+
+        const chip = document.createElement("div");
+        chip.className = "chip savings-chip font-label-medium";
+
+        if (isFree) {
+          chip.textContent = "free";
+          chip.title = `vs OpenRouter's $${minP.toFixed(2)}/$${minC.toFixed(2)}`;
+        } else {
+          const savings = Math.floor(
+            Math.min(
+              minP > 0 ? (minP - ourPrompt) / minP : 0,
+              minC > 0 ? (minC - ourCompletion) / minC : 0,
+            ) * 100,
+          );
+
+          if (savings < 5) return;
+          chip.textContent = `${savings}% cheaper`;
+          chip.title = `vs OpenRouter's $${minP.toFixed(2)}/${minC.toFixed(2)}`;
+        }
+        container.appendChild(chip);
+      });
+    }
+
+    enhanceWithPriceComparison();
   </script>
 </Layout>
 
