@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import { parse } from "./microdown";
+  import { parse } from "marked";
+  import { sanitize } from "./sanitize";
 
   let model = $state("kimi-k2-0905");
   let systemPrompt = $state("");
@@ -143,6 +144,11 @@
   onMount(() => {
     updateModels();
   });
+
+  const format = (markdown: string) => {
+    const parsed = parse(markdown) as string;
+    return sanitize(parsed);
+  };
 </script>
 
 <div class="messages">
@@ -156,11 +162,11 @@
         {#if message.reasoning?.trim()}
           <div class="reasoning">
             <h3 class="font-title-medium">Reasoning</h3>
-            <div class="prose">{@html parse(message.reasoning)}</div>
+            <div class="prose">{@html format(message.reasoning)}</div>
           </div>
         {/if}
         <div class="message-content">
-          <div class="prose">{@html parse(message.content)}</div>
+          <div class="prose">{@html format(message.content)}</div>
         </div>
         {#if message.ttft || message.tps}
           <div class="message-stats font-label-medium">
