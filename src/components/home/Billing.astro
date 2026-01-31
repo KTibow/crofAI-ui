@@ -2,32 +2,72 @@
 import If from "../jinja/If.astro";
 ---
 
-<h2 class="font-headline-large">Billing</h2>
-<div class="box">
-  <If condition="email">
-    <p>TODO</p>
+<a href="/settings-api/add-credits" class="font-label-large layer primary">Add credits</a>
+<a href="https://billing.stripe.com/p/login/aEU3ePgBj3aEePe288" class="font-label-large layer"
+  >Manage payment methods</a
+>
+<label>
+  <If condition="top_up">
+    <input type="checkbox" id="autoTopUp" checked />
   </If>
-  <If condition="not email">
-    <p>Add a billing email first.</p>
-    <p>TODO</p>
+  <If condition="not top_up">
+    <input type="checkbox" id="autoTopUp" />
   </If>
-  <h2 class="font-title-medium">Top up credits</h2>
-</div>
+  <p>Auto top-up</p>
+  <p class="font-body-medium">Add $10 when credits are low; requires default payment method</p>
+</label>
+
+<script>
+  const autoTopUpCheckbox = document.querySelector("#autoTopUp") as HTMLInputElement;
+  autoTopUpCheckbox.oninput = async () => {
+    const enable = autoTopUpCheckbox.checked;
+    try {
+      const r = await fetch("/settings-api/auto-top-up", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          toggle: enable ? "on" : "off",
+        }),
+      });
+      if (!r.ok) {
+        throw new Error(`Error toggling auto top-up: ${r.status} ${r.statusText}`);
+      }
+    } catch (e) {
+      alert("Failed to update auto top-up setting.");
+      throw e;
+    }
+  };
+</script>
 
 <style>
-  .box {
+  a {
     display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    border-radius: 1.5rem;
-
-    background-color: var(--m3c-surface-container-low);
-
-    > .font-headline-small {
-      margin-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    border-radius: 1.25rem;
+    padding-inline: 1rem;
+    cursor: pointer;
+    background-color: var(--m3c-primary-container);
+    color: var(--m3c-on-primary-container);
+    &.primary {
+      background-color: var(--m3c-primary);
+      color: var(--m3c-on-primary);
     }
-    > :last-child {
-      margin-top: auto;
-    }
+    align-self: start;
+  }
+  label {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.5rem;
+    margin-top: 0.5rem;
+  }
+  input {
+    grid-row: 1 / span 2;
+  }
+  .font-body-medium {
+    color: var(--m3c-on-surface-variant);
   }
 </style>

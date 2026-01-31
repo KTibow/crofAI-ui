@@ -7,6 +7,7 @@ const { condition } = Astro.props;
 export const email = import.meta.env.DEV ? "fake@example.com" : "{{ email }}";
 
 const loggedin = true;
+const autotopup = false;
 const plan = "payg" as string;
 const usable_requests = 100;
 const devContext: Record<string, boolean> = {
@@ -18,6 +19,8 @@ const devContext: Record<string, boolean> = {
   "plan != 'pro'": plan != "pro",
   email: Boolean(email),
   "not email": !email,
+  top_up: autotopup,
+  "not top_up": !autotopup,
   "usable_requests != None": usable_requests != null,
   "usable_requests == None": usable_requests == null,
 };

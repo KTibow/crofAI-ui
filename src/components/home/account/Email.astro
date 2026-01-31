@@ -4,7 +4,7 @@ import If, { email } from "../../jinja/If.astro";
 
 <form class="email-form">
   <input value={email} placeholder="Email" required />
-  <button class="layer">
+  <button class="font-label-large layer">
     <If condition="email">Update</If>
     <If condition="not email">Add</If>
   </button>
@@ -37,7 +37,8 @@ import If, { email } from "../../jinja/If.astro";
     }
     > button {
       border-radius: 0.75rem 1.5rem 1.5rem 0.75rem;
-      color: var(--m3c-primary);
+      background-color: var(--m3c-primary-container);
+      color: var(--m3c-on-primary-container);
       cursor: pointer;
     }
   }
