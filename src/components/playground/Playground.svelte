@@ -26,9 +26,7 @@
 
   const updateModels = async () => {
     const r = await fetch("/v2/models");
-    if (!r.ok) {
-      throw new Error(`Models are ${r.status}ing`);
-    }
+    if (!r.ok) throw new Error(`${r.status} while listing models`);
     const { data }: { data: Model[] } = await r.json();
     models = data.map((m) => {
       let name = m.name;
@@ -92,9 +90,7 @@
       }),
       signal: aborter!.signal,
     });
-    if (!r.ok) {
-      throw new Error(`Generation failed with status ${r.status}`);
-    }
+    if (!r.ok) throw new Error(`${r.status} while generating`);
 
     // Create reactive assistant message and add to array
     let assistantMsg: Message = $state({

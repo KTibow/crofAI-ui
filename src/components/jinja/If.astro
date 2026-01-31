@@ -4,7 +4,7 @@ interface Props {
 }
 const { condition } = Astro.props;
 
-export const email = import.meta.env.DEV ? "fake@example.com" : "{{ email }}";
+export const email = import.meta.env.DEV ? "fake@example.com" : "{{ email if email else '' }}";
 
 const loggedin = true;
 const autotopup = false;

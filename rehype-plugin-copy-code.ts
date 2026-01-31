@@ -3,7 +3,7 @@ import { h } from "hastscript";
 
 export const copyCode = () => {
   return (tree: any) => {
-    visit(tree, "element", (node, index, parent) => {
+    visit(tree, "element", (node) => {
       if (node.tagName == "pre" && node.children[0]?.tagName == "code") {
         node.children.push(
           h(

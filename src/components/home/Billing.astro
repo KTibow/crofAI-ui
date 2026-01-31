@@ -31,9 +31,7 @@ import If from "../jinja/If.astro";
           toggle: enable ? "on" : "off",
         }),
       });
-      if (!r.ok) {
-        throw new Error(`Error toggling auto top-up: ${r.status} ${r.statusText}`);
-      }
+      if (!r.ok) throw new Error(`${r.status} while toggling auto top-up`);
     } catch (e) {
       alert("Failed to update auto top-up setting.");
       throw e;

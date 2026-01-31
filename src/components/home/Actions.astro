@@ -22,7 +22,7 @@ import { pages } from "../../lib/pages";
     let token: string;
     try {
       const r = await fetch("/user_api_create-token");
-      if (!r.ok) throw new Error("Failed to regenerate API token");
+      if (!r.ok) throw new Error(`${r.status} while creating token`);
       ({ token } = await r.json());
     } catch (e) {
       keyElement.textContent = "Error!";
