@@ -19,9 +19,15 @@ import { pages } from "../../lib/pages";
 <script>
   const keyElement = document.getElementById("key") as HTMLButtonElement;
   keyElement.onclick = async () => {
-    const r = await fetch("/user_api_create-token");
-    if (!r.ok) throw new Error("Failed to regenerate API token");
-    const { token } = await r.json();
+    let token: string;
+    try {
+      const r = await fetch("/user_api_create-token");
+      if (!r.ok) throw new Error("Failed to regenerate API token");
+      ({ token } = await r.json());
+    } catch (e) {
+      keyElement.textContent = "Error!";
+      throw e;
+    }
 
     keyElement.textContent = "Copy";
     keyElement.onclick = () => {
