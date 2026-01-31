@@ -29,12 +29,13 @@ import { pages } from "../../lib/pages";
       throw e;
     }
 
-    keyElement.textContent = "Copy";
+    const copyText = "Copy";
+    keyElement.textContent = copyText;
     keyElement.onclick = () => {
       navigator.clipboard.writeText(token);
       keyElement.textContent = "Copied!";
       setTimeout(() => {
-        keyElement.textContent = "Copy API key";
+        keyElement.textContent = copyText;
       }, 2000);
     };
   };
