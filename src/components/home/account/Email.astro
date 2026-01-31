@@ -1,0 +1,44 @@
+---
+import If, { email } from "../../jinja/If.astro";
+---
+
+<form class="email-form">
+  <input value={email} placeholder="Email" required />
+  <button class="layer">
+    <If condition="email">Update</If>
+    <If condition="not email">Add</If>
+  </button>
+</form>
+
+<script>
+  const emailForm = document.querySelector(".email-form") as HTMLFormElement;
+  emailForm.onsubmit = (e) => {
+    e.preventDefault();
+    const emailInput = emailForm.querySelector("input") as HTMLInputElement;
+    const email = emailInput.value;
+    location.href = `/settings-api/update-email/${email}`;
+  };
+</script>
+
+<style>
+  .email-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    height: 3rem;
+    border-radius: 1.5rem;
+    background-color: var(--m3c-surface-container);
+
+    align-self: start;
+    > * {
+      padding-inline: 0.5rem;
+    }
+    > input {
+      border-radius: 1.5rem 0.75rem 0.75rem 1.5rem;
+    }
+    > button {
+      border-radius: 0.75rem 1.5rem 1.5rem 0.75rem;
+      color: var(--m3c-primary);
+      cursor: pointer;
+    }
+  }
+</style>

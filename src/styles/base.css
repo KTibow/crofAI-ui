@@ -19,6 +19,7 @@
   color: var(--m3c-on-surface);
   accent-color: var(--m3c-primary);
   font-family: "Inter Variable", system-ui;
+  interpolate-size: allow-keywords;
   --m3c-surface: #0f0d12;
   --m3c-surface-container-lowest: #000;
   --m3c-surface-container-low: #141218;

@@ -4,9 +4,10 @@ interface Props {
 }
 const { condition } = Astro.props;
 
+export const email = import.meta.env.DEV ? "fake@example.com" : "{{ email }}";
+
 const loggedin = true;
 const plan = "payg" as string;
-const email = "fake@example.com";
 const usable_requests = 100;
 const devContext: Record<string, boolean> = {
   loggedin: loggedin,

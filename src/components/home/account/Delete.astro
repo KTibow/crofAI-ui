@@ -1,14 +1,8 @@
----
-
----
-
-<h2 class="font-headline-large">Account</h2>
-<form class="delete-form" action="/settings-api/delete-user">
-  <button class="delete font-label-large layer"> Delete account </button>
-</form>
+<form id="delete-form" action="/settings-api/delete-user"></form>
+<button form="delete-form" class="delete font-label-large layer">Delete account</button>
 
 <script>
-  const deleteForm = document.querySelector(".delete-form") as HTMLFormElement;
+  const deleteForm = document.querySelector("#delete-form") as HTMLFormElement;
   deleteForm.onsubmit = (e) => {
     const confirmation = prompt(
       'This action cannot be undone. Type "Delete my account" to confirm.',
@@ -21,8 +15,8 @@
 </script>
 
 <style>
-  .delete-form {
-    display: contents;
+  #delete-form {
+    display: none;
   }
   .delete {
     display: flex;

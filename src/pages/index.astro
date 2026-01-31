@@ -3,7 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import Actions from "../components/home/Actions.astro";
 import Usage from "../components/home/Usage.astro";
 import Billing from "../components/home/Billing.astro";
-import Account from "../components/home/Account.astro";
+import Email from "../components/home/account/Email.astro";
+import Password from "../components/home/account/Password.astro";
+import Delete from "../components/home/account/Delete.astro";
 ---
 
 <Layout title="Home" footerPushToBottom={true} includeHeader={false}>
@@ -16,7 +18,12 @@ import Account from "../components/home/Account.astro";
     <main>
       <Usage />
       <Billing />
-      <Account />
+      <h2 class="font-headline-large">Account</h2>
+      <div class="account">
+        <Email />
+        <Password />
+        <Delete />
+      </div>
     </main>
   </div>
 </Layout>
@@ -67,5 +74,10 @@ import Account from "../components/home/Account.astro";
   }
   main > :global(:not(:first-child)) {
     margin-top: 1em;
+  }
+  .account {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 </style>
